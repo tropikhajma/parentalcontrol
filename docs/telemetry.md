@@ -116,10 +116,11 @@ Import [grafana/familycontrol-dashboard.json](../grafana/familycontrol-dashboard
 through **Dashboards → New → Import** and select the Grafana Cloud Prometheus
 data source.
 
-Grafana's OTLP-to-Prometheus translation can add unit or counter suffixes
-depending on the stack translation strategy. If a panel is empty, use Explore
-to find the translated name and adjust the query. The common translation
-replaces `.` with `_`.
+Grafana's default OTLP-to-Prometheus translation replaces `.` with `_`, adds
+`_total` to monotonic counters, and adds `_ratio` to gauges whose OpenTelemetry
+unit is `1`. For example, `system.memory.utilization` is stored as
+`system_memory_utilization_ratio`. If a panel is empty, use Explore to confirm
+the translated name and adjust the query.
 
 Recommended alerts:
 

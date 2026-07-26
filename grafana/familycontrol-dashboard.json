@@ -263,12 +263,12 @@
       },
       "targets": [
         {
-          "expr": "system_memory_utilization",
+          "expr": "system_memory_utilization_ratio",
           "legendFormat": "memory",
           "refId": "A"
         },
         {
-          "expr": "system_filesystem_utilization",
+          "expr": "system_filesystem_utilization_ratio",
           "legendFormat": "overlay",
           "refId": "B"
         }
@@ -344,7 +344,7 @@
       },
       "targets": [
         {
-          "expr": "system_cpu_load_average_1m",
+          "expr": "system_cpu_load_average_1m_ratio",
           "legendFormat": "load",
           "refId": "A"
         }
