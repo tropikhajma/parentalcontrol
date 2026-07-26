@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta name="theme-color" content="#173f35">
+	<title>Family Control</title>
+	<style>
+		:root { color-scheme: light; font: 16px/1.45 system-ui, sans-serif; background:#f4f7f5; color:#18332c }
+		* { box-sizing:border-box }
+		body { margin:0 }
+		main { max-width:46rem; margin:auto; padding:1rem }
+		header { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:1rem }
+		h1 { font-size:1.55rem; margin:.5rem 0 }
+		h2 { margin:.2rem 0; font-size:1.2rem }
+		button,input,select { font:inherit }
+		button { min-height:2.8rem; padding:.65rem 1rem; border:0; border-radius:.7rem; background:#176b55; color:white; font-weight:650 }
+		button.secondary { background:#e4ece8; color:#18332c }
+		button.danger { background:#b42318 }
+		button:disabled { opacity:.5 }
+		.card { background:white; border:1px solid #d9e3de; border-radius:1rem; padding:1rem; margin:.8rem 0; box-shadow:0 1px 3px #173f3512 }
+		.row { display:flex; align-items:center; justify-content:space-between; gap:.8rem }
+		.actions { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.8rem }
+		.meta { color:#61736d; margin:.2rem 0 }
+		.online { color:#18794e; font-weight:700 }
+		.paused { color:#b42318; font-weight:700 }
+		label { display:block; font-weight:650; margin:.8rem 0 .25rem }
+		input,select { width:100%; padding:.75rem; border:1px solid #aebdb7; border-radius:.65rem; background:white }
+		dialog { width:min(92vw,32rem); border:0; border-radius:1rem; padding:1.2rem }
+		dialog::backdrop { background:#10251f99 }
+		.hidden { display:none!important }
+		.error { padding:.75rem; border-radius:.6rem; background:#fee4e2; color:#8a1c13; margin:.7rem 0 }
+		.empty { text-align:center; padding:2rem 1rem; color:#61736d }
+		#login { max-width:25rem; margin:12vh auto }
+		@media(max-width:32rem) { .row { align-items:stretch; flex-direction:column } .row>button { width:100% } }
+	</style>
+</head>
+<body>
+<main>
+	<section id="login" class="card hidden">
+		<h1>Family Control</h1>
+		<p class="meta">Sign in to manage people and their devices.</p>
+		<div id="login-error" class="error hidden"></div>
+		<form id="login-form">
+			<label for="username">Username</label>
+			<input id="username" autocomplete="username" value="familycontrol" required>
+			<label for="password">Password</label>
+			<input id="password" type="password" autocomplete="current-password" required>
+			<div class="actions"><button type="submit">Sign in</button></div>
+		</form>
+	</section>
+
+	<section id="app" class="hidden">
+		<header>
+			<div><h1>Family Control</h1><p class="meta">People and devices</p></div>
+			<button id="logout" class="secondary">Sign out</button>
+		</header>
+		<div id="error" class="error hidden"></div>
+		<div id="people"></div>
+		<button id="add-person">Add person</button>
+	</section>
+</main>
+
+<dialog id="person-dialog">
+	<form id="person-form">
+		<h2 id="person-title">Add person</h2>
+		<input id="person-id" type="hidden">
+		<label for="person-name">Name</label>
+		<input id="person-name" maxlength="40" required>
+		<div class="actions">
+			<button type="submit">Save</button>
+			<button type="button" class="secondary cancel">Cancel</button>
+		</div>
+	</form>
+</dialog>
+
+<dialog id="device-dialog">
+	<form id="device-form">
+		<h2 id="device-title">Add device</h2>
+		<input id="device-id" type="hidden">
+		<input id="device-person" type="hidden">
+		<label for="device-name">Device name</label>
+		<input id="device-name" maxlength="40" required>
+		<label for="device-mac">MAC address</label>
+		<input id="device-mac" inputmode="text" placeholder="AA:BB:CC:DD:EE:FF" required>
+		<div class="actions">
+			<button type="submit">Save</button>
+			<button type="button" class="secondary cancel">Cancel</button>
+		</div>
+	</form>
+</dialog>
+<script src="app.js"></script>
+</body>
+</html>

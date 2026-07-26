@@ -1,0 +1,18 @@
+#!/bin/sh
+
+if ! grep -q '^familycontrol:' /etc/passwd; then
+	useradd --system --no-create-home --shell /bin/false familycontrol
+fi
+
+uci -q batch <<'EOF'
+set rpcd.familycontrol=login
+set rpcd.familycontrol.username='familycontrol'
+set rpcd.familycontrol.password='$p$familycontrol'
+delete rpcd.familycontrol.read
+add_list rpcd.familycontrol.read='luci-app-familycontrol'
+delete rpcd.familycontrol.write
+add_list rpcd.familycontrol.write='luci-app-familycontrol'
+commit rpcd
+EOF
+
+exit 0

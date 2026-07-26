@@ -39,18 +39,18 @@ OpenWrt container.
 The package built for OpenWrt 25.12.4 is:
 
 ```text
-dist/luci-app-familycontrol-0.1.0-r2.apk
-SHA-256: 52a58789bad8277bc5e3e66a5a52695237f0b6d4fb11816df5b597afa647f5f8
+dist/luci-app-familycontrol-0.1.0-r4.apk
+SHA-256: 9c707ed8dce3d668f6d1486055f68c5944ce86a51a9944170a457bff697eb572
 ```
 
 Copy it to the router, install it, and restart rpcd:
 
 ```sh
 ssh root@openwrt \
-  'cat > /tmp/luci-app-familycontrol-0.1.0-r2.apk' \
-  < dist/luci-app-familycontrol-0.1.0-r2.apk
+  'cat > /tmp/luci-app-familycontrol-0.1.0-r4.apk' \
+  < dist/luci-app-familycontrol-0.1.0-r4.apk
 ssh root@openwrt
-apk add --allow-untrusted /tmp/luci-app-familycontrol-0.1.0-r2.apk
+apk add --allow-untrusted /tmp/luci-app-familycontrol-0.1.0-r4.apk
 /etc/init.d/rpcd restart
 ```
 
@@ -79,6 +79,36 @@ apk del luci-app-familycontrol
 
 The application appears under **Services → Family Control**. Configure people
 and devices first, then use the Overview page for pause/resume.
+
+## Standalone family interface
+
+Release `r4` also provides a mobile standalone interface at:
+
+```text
+http://family.hajma.cz/family/
+```
+
+It uses the separate `familycontrol` account, whose rpcd access is limited to
+the Family Control API and UCI configuration. Set its password on the router
+after installation:
+
+```sh
+passwd familycontrol
+```
+
+For LAN name resolution, configure dnsmasq to answer locally and not forward
+IPv6 queries to public DNS:
+
+```sh
+uci add_list dhcp.@dnsmasq[0].address='/family.hajma.cz/192.168.1.1'
+uci add_list dhcp.@dnsmasq[0].server='/family.hajma.cz/'
+uci commit dhcp
+/etc/init.d/dnsmasq restart
+```
+
+HTTP credentials are not protected from devices able to observe LAN traffic.
+Keep the interface limited to trusted LAN and Tailscale networks until HTTPS is
+enabled. Do not expose uhttpd through the WAN firewall.
 
 Do not publish LuCI on the WAN. Connect to its Tailscale address to manage it
 remotely.

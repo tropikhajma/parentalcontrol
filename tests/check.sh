@@ -7,6 +7,11 @@ node --check \
 	"$repo_dir/luci-app-familycontrol/htdocs/luci-static/resources/view/familycontrol/overview.js"
 node --check \
 	"$repo_dir/luci-app-familycontrol/htdocs/luci-static/resources/view/familycontrol/manage.js"
+node --check \
+	"$repo_dir/luci-app-familycontrol/root/www/family/app.js"
+
+sh -n \
+	"$repo_dir/luci-app-familycontrol/root/etc/uci-defaults/99-familycontrol-http"
 
 jq empty \
 	"$repo_dir/luci-app-familycontrol/root/usr/share/luci/menu.d/luci-app-familycontrol.json" \
