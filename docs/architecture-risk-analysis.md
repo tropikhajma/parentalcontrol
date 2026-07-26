@@ -5,7 +5,8 @@ Date: 2026-07-26
 Scope: Family Control `0.1.0-r13`, the live OpenWrt 25.12.4 deployment, its
 standalone web interface, rpcd/ucode backend, UCI and firewall4 integration,
 Endora DNS, Let's Encrypt/ACME-DNS certificate automation, and the planned
-Tailscale connection.
+Tailscale connection. It also covers the optional Grafana Cloud OpenTelemetry
+metrics export introduced in `r13`.
 
 This is a qualitative engineering assessment, not a penetration test or a
 guarantee of security. It uses the current source, live non-secret router
@@ -42,6 +43,8 @@ replacement for application authorization.
 | Family credentials and session | Credentials and session tokens must not be observable or reusable by another LAN/tailnet device. |
 | Family configuration | People, device identifiers, and assignments must remain valid and recoverable. |
 | Household metadata | Names, MAC addresses, hostnames, and IP addresses should not leave the router unintentionally. |
+| Grafana write credential | Compromise must not grant read access, dashboard administration, or authority outside metrics ingestion. |
+| Telemetry integrity | Metrics and alerts should reflect router state without becoming part of the enforcement path. |
 | Recovery access | A TLS, DNS, firewall, or Tailscale failure must not lock the owner out of the router. |
 
 ## Actors and assumptions
@@ -55,8 +58,9 @@ replacement for application authorization.
   and may attempt credential theft, brute force, or cross-origin attacks.
 - A compromised tailnet account or enrolled device becomes a remote network
   actor once Tailscale is enabled.
-- Endora, Let's Encrypt, ACME-DNS, OpenWrt package repositories, GitHub Actions,
-  npm, and container registries are supply-chain or availability dependencies.
+- Endora, Let's Encrypt, ACME-DNS, Grafana Cloud, OpenWrt package repositories,
+  GitHub Actions, npm, and container registries are supply-chain or availability
+  dependencies.
 
 Physical access to the router, compromise of the owner's root credentials, and
 attacks against OpenWrt itself are relevant but outside the application's
@@ -83,6 +87,8 @@ wife browser -- LAN/Tailscale -- uHTTPd :443
                                   firewall4/nftables
                                         |
                               managed device traffic
+
+familycontrol metrics -- outbound HTTPS/OTLP --> Grafana Cloud
 ```
 
 The important shared boundary is uHTTPd: the simple interface, ubus endpoint,
@@ -105,6 +111,14 @@ not reduce the web code and endpoints exposed on that origin.
 - UI-provided names and discovered-device labels are HTML-escaped before
   insertion.
 - ACME and ACME-DNS secrets are root-only and excluded from Git.
+- Grafana telemetry is disabled by default, uses HTTPS, and stores its
+  metrics-write token in a root-readable UCI file.
+- Exported metrics are aggregate and contain no person names, MAC addresses,
+  IP addresses, hostnames, browsing activity, or unbounded device attributes.
+- Grafana failure is fail-open for observability: batches are dropped after a
+  ten-second timeout and access-control operations continue locally.
+- The Grafana authorization value is written to a mode `0600` temporary file,
+  is not placed in process arguments, and is removed after each attempt.
 - Passive ZAP testing is local and its reports are excluded from Git.
 
 ## Prioritized risk register
@@ -312,9 +326,41 @@ LAN IP addresses. ZAP reports and support logs can capture internal URLs and
 headers. This is modest household data, but publishing it can identify devices
 and network structure.
 
-**Mitigation:** Keep reports ignored, redact logs and screenshots, minimize
-retention, avoid cloud telemetry by default, and document any future cloud data
-flow before implementation.
+The optional Grafana exporter adds an intentional outbound data flow. Its
+current metric schema contains only aggregate counts, bounded action/result
+labels, router utilization, and service metadata. A future developer could
+nevertheless add a person, MAC, hostname, IP, URL, or other high-cardinality
+attribute and silently turn operational metrics into household tracking data.
+
+**Mitigation:** Keep reports ignored, redact logs and screenshots, and minimize
+retention. Keep telemetry disabled by default. Treat the metric catalog and
+privacy boundary in `docs/telemetry.md` as part of the security interface.
+Reject identifiers and unbounded attributes in review and tests, and review
+Grafana retention and access whenever the schema changes.
+
+### R15 — Telemetry credentials and cloud observability can fail or be abused
+
+**Rating: Low-medium — current, optional**
+
+When enabled, the router stores a Grafana Cloud access-policy token and sends
+one OTLP/HTTP batch per minute. Theft of that token could allow an attacker to
+write false metrics, consume the free-tier allowance, or interfere with alerts.
+Grafana compromise, account compromise, retention-policy changes, DNS/TLS
+failure, or an exporter defect can remove or falsify observability. Metrics are
+therefore useful evidence but not an enforcement authority. Repeated failures
+can also generate a small amount of local process and network load.
+
+The current token is intended to have only `metrics:write`; it cannot read
+metrics or administer Grafana. The exporter uses HTTPS, a ten-second timeout,
+no retry queue, a minimum 30-second interval, bounded labels, and `/tmp`
+counters. Enforcement does not wait for or depend on Grafana.
+
+**Mitigation:** Retain a stack-scoped `metrics:write` token only, keep the UCI
+file mode `0600`, rotate the token after suspected disclosure, and never print
+the telemetry configuration in diagnostics. Alert on stale telemetry from an
+independent Grafana-side rule, cap label cardinality, monitor free-tier usage,
+and keep local enforcement status authoritative. Consider certificate pinning
+only if its operational and renewal risks are explicitly addressed.
 
 ## Recommended remediation sequence
 
@@ -335,6 +381,8 @@ flow before implementation.
 3. Add login throttling and security-relevant audit events.
 4. Display desired versus verified enforcement state.
 5. Sign release packages and pin mutable CI/container dependencies.
+6. Add automated assertions that telemetry payloads contain no household
+   identifiers and that exporter failure cannot block enforcement.
 
 ### P2 — Remote access
 
@@ -367,6 +415,9 @@ checks demonstrate:
 - Tailscale policy allows only the intended listener and denies other router
   and subnet services;
 - release artifacts are reproducible, checksummed, and signed.
+- telemetry payloads contain only the documented bounded attributes;
+- the Grafana token is absent from process arguments, logs, and source control;
+- Grafana outage or authentication failure cannot delay or alter enforcement.
 
 ## References
 
@@ -376,3 +427,5 @@ checks demonstrate:
 - [OpenWrt uHTTPd documentation](https://openwrt.org/docs/guide-user/services/webserver/http.uhttpd)
 - [Tailscale access control](https://tailscale.com/docs/features/access-control)
 - [Tailscale subnet-router guidance](https://tailscale.com/kb/1104/enable-ip-forwarding)
+- [Grafana Cloud OTLP endpoint](https://grafana.com/docs/grafana-cloud/send-data/otlp/send-data-otlp/)
+- [Grafana Cloud access policies](https://grafana.com/docs/grafana-cloud/security-and-account-management/authentication-and-permissions/access-policies/)
