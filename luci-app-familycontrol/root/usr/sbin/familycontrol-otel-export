@@ -5,6 +5,10 @@
 IPKG_INSTROOT="${IPKG_INSTROOT:-}"
 . /lib/functions.sh
 
+enabled=0
+endpoint=''
+instance_id=''
+api_token=''
 config_load familycontrol_telemetry
 config_get_bool enabled main enabled 0
 config_get endpoint main endpoint
@@ -25,10 +29,10 @@ case "$endpoint" in
 		;;
 esac
 
-[ -n "$instance_id" ] && [ -n "$api_token" ] || {
+if [ -z "$instance_id" ] || [ -z "$api_token" ]; then
 	logger -t familycontrol-telemetry "OTLP credentials are not configured"
 	exit 1
-}
+fi
 
 case "$instance_id$api_token" in
 	*'
