@@ -30,6 +30,15 @@ jobs:
       - name: Lint JavaScript
         run: npm run lint
 
+      - name: Verify CycloneDX SBOM
+        run: npm run sbom:check
+
+      - name: Retain CycloneDX SBOM
+        uses: actions/upload-artifact@v4
+        with:
+          name: familycontrol-sbom
+          path: sbom/familycontrol.cdx.json
+
       - name: Install ShellCheck
         run: |
           sudo apt-get update

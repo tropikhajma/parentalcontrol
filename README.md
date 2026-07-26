@@ -75,6 +75,23 @@ addresses, hostnames, or browsing activity.
 See [docs/telemetry.md](docs/telemetry.md) for the metric catalog, Grafana
 configuration, secret handling, dashboard import, and operational behavior.
 
+## Software bill of materials
+
+The repository includes a deterministic CycloneDX SBOM at
+[`sbom/familycontrol.cdx.json`](sbom/familycontrol.cdx.json). It distinguishes
+development-only npm packages from the OpenWrt runtime dependencies declared by
+the application package. Regenerate and verify it with:
+
+```sh
+npm run sbom
+npm run sbom:check
+```
+
+OpenWrt resolves the exact runtime package versions when the APK is installed,
+so those components are identified by package name and explicitly marked as
+installation-resolved. CI rejects a stale checked-in SBOM and retains the
+verified file as a workflow artifact.
+
 ## Installing a development build
 
 The package built for OpenWrt 25.12.4 is:

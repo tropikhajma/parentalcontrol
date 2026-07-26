@@ -1,0 +1,3782 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "version": 1,
+  "metadata": {
+    "lifecycles": [
+      {
+        "phase": "build"
+      }
+    ],
+    "tools": [
+      {
+        "vendor": "npm",
+        "name": "cli",
+        "version": "11.16.0"
+      }
+    ],
+    "component": {
+      "type": "application",
+      "bom-ref": "pkg:generic/familycontrol@0.1.0-r13",
+      "name": "familycontrol",
+      "version": "0.1.0-r13",
+      "licenses": [
+        {
+          "license": {
+            "id": "GPL-3.0-or-later"
+          }
+        }
+      ],
+      "purl": "pkg:generic/familycontrol@0.1.0-r13",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/tropikhajma/parentalcontrol"
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "bom-ref": "@eslint-community/eslint-utils@4.10.1",
+      "type": "library",
+      "name": "@eslint-community/eslint-utils",
+      "version": "4.10.1",
+      "scope": "optional",
+      "author": "Toru Nagashima",
+      "description": "Utilities for ESLint plugins.",
+      "purl": "pkg:npm/%40eslint-community/eslint-utils@4.10.1",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@eslint-community/eslint-utils/-/eslint-utils-4.10.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/eslint-community/eslint-utils"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/eslint-community/eslint-utils#readme"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/eslint-community/eslint-utils/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "72e69d73154513cb032ba89625bb3c4a7d1abf636b8764121908559415bd01a007a87c235ac6474fc2c9e211463e1ec048157675e15d33b1ff0cf8ee96687cae"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "eslint-visitor-keys@3.4.3",
+      "type": "library",
+      "name": "eslint-visitor-keys",
+      "version": "3.4.3",
+      "scope": "optional",
+      "author": "Toru Nagashima (https://github.com/mysticatea)",
+      "description": "Constants and utilities about visitor keys to traverse AST.",
+      "purl": "pkg:npm/eslint-visitor-keys@3.4.3",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/eslint-visitor-keys/-/eslint-visitor-keys-3.4.3.tgz"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/eslint/eslint-visitor-keys#readme"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/eslint/eslint-visitor-keys/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "c2973e2d77a2ca28acc4f944914cd4eacbf24b57eb20edcc8318f57ddcbb3e6f1883382e6b1d8ddc56bf0ff6a0d56a9b3a9add23eb98eb031497cfdad86fa26a"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@eslint-community/regexpp@4.12.2",
+      "type": "library",
+      "name": "@eslint-community/regexpp",
+      "version": "4.12.2",
+      "scope": "optional",
+      "author": "Toru Nagashima",
+      "description": "Regular expression parser for ECMAScript.",
+      "purl": "pkg:npm/%40eslint-community/regexpp@4.12.2",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@eslint-community/regexpp/-/regexpp-4.12.2.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/eslint-community/regexpp"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/eslint-community/regexpp#readme"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/eslint-community/regexpp/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "12b8924e5b79382f7fed25e445208085f4b1c684948019b7dce1fe224c1b769828aac4ac520ef2dee87e208088fd08380415abdd4da2dfd4699b271bc4cab87b"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@eslint/config-array@0.23.5",
+      "type": "library",
+      "name": "@eslint/config-array",
+      "version": "0.23.5",
+      "scope": "optional",
+      "author": "Nicholas C. Zakas",
+      "description": "General purpose glob-based configuration matching.",
+      "purl": "pkg:npm/%40eslint/config-array@0.23.5",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@eslint/config-array/-/config-array-0.23.5.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/eslint/rewrite.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/eslint/rewrite/tree/main/packages/config-array#readme"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/eslint/rewrite/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "63790a2ef0b576f4ce4fea0696a350d572ea2ba0f51d4d985cf739d8d98094965b30c583cc66173223d127c4d80f7f66b83fce4e395998d27889beddbd2acc04"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@eslint/config-helpers@0.7.0",
+      "type": "library",
+      "name": "@eslint/config-helpers",
+      "version": "0.7.0",
+      "scope": "optional",
+      "description": "Helper utilities for creating ESLint configuration",
+      "purl": "pkg:npm/%40eslint/config-helpers@0.7.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@eslint/config-helpers/-/config-helpers-0.7.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/eslint/rewrite.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/eslint/rewrite/tree/main/packages/config-helpers#readme"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/eslint/rewrite/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "0ce6ddfca294b14f85685bf83cbc5245e9e95df41698f5d73f7a4f67afcad4f0ab32edaf42930332e41efc1a987a82dccfcae8d1b54317547138981f54476153"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@eslint/core@1.2.1",
+      "type": "library",
+      "name": "@eslint/core",
+      "version": "1.2.1",
+      "scope": "optional",
+      "author": "Nicholas C. Zakas",
+      "description": "Runtime-agnostic core of ESLint",
+      "purl": "pkg:npm/%40eslint/core@1.2.1",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@eslint/core/-/core-1.2.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/eslint/rewrite.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/eslint/rewrite/tree/main/packages/core#readme"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/eslint/rewrite/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "330704d4ff806780ba0d69698a7fce98e039e2698867ffb166e26241de12c81dbda00263377d145bdc2428da6d5b672da78704b2f8652d8fc2b10d6ea070e5a1"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@eslint/js@10.0.1",
+      "type": "library",
+      "name": "@eslint/js",
+      "version": "10.0.1",
+      "scope": "optional",
+      "description": "ESLint JavaScript language implementation",
+      "purl": "pkg:npm/%40eslint/js@10.0.1",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@eslint/js/-/js-10.0.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/eslint/eslint.git"
+        },
+        {
+          "type": "website",
+          "url": "https://eslint.org"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "cde47d939a5de20c6367469b46821ac5d73b2379c392da17664daa3aff6008d5b1de6570127df65518722da46c0e22634ecd31abf4fc99f3edcae5eeec658170"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@eslint/object-schema@3.0.5",
+      "type": "library",
+      "name": "@eslint/object-schema",
+      "version": "3.0.5",
+      "scope": "optional",
+      "author": "Nicholas C. Zakas",
+      "description": "An object schema merger/validator",
+      "purl": "pkg:npm/%40eslint/object-schema@3.0.5",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@eslint/object-schema/-/object-schema-3.0.5.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/eslint/rewrite.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/eslint/rewrite/tree/main/packages/object-schema#readme"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/eslint/rewrite/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "bea4da504831ce6f980d274495a77a3e24685f8b7c5460e30adb74e739f89d4f35d14231fee34457bfe5649e8ac054e12993b33b1cd7cb8f1d6be368ec765a33"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@eslint/plugin-kit@0.7.2",
+      "type": "library",
+      "name": "@eslint/plugin-kit",
+      "version": "0.7.2",
+      "scope": "optional",
+      "author": "Nicholas C. Zakas",
+      "description": "Utilities for building ESLint plugins.",
+      "purl": "pkg:npm/%40eslint/plugin-kit@0.7.2",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@eslint/plugin-kit/-/plugin-kit-0.7.2.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/eslint/rewrite.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/eslint/rewrite/tree/main/packages/plugin-kit#readme"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/eslint/rewrite/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "f82340cf182592ba4d7ff90acb0a907e4ef8423b5c7ae384ed09be005f26891bcf17fc2698ae7e3893a0561dc05534f744fda61f7f8539ac65139bfbda8c24d0"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@humanfs/core@0.19.2",
+      "type": "library",
+      "name": "@humanfs/core",
+      "version": "0.19.2",
+      "scope": "optional",
+      "author": "Nicholas C. Zakas",
+      "description": "The core of the humanfs library.",
+      "purl": "pkg:npm/%40humanfs/core@0.19.2",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@humanfs/core/-/core-0.19.2.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/humanwhocodes/humanfs.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/humanwhocodes/humanfs#readme"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/humanwhocodes/humanfs/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "5215cd9be08531671b0a15f2c05c249a1aa3b373d10a67126bf85f0602c86fba10e4735bd704b489c5ac1ad48050d81e7c7788f9e06b03c2357f199b1ec19dbc"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@humanfs/node@0.16.8",
+      "type": "library",
+      "name": "@humanfs/node",
+      "version": "0.16.8",
+      "scope": "optional",
+      "author": "Nicholas C. Zakas",
+      "description": "The Node.js bindings of the humanfs library.",
+      "purl": "pkg:npm/%40humanfs/node@0.16.8",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@humanfs/node/-/node-0.16.8.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/humanwhocodes/humanfs.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/humanwhocodes/humanfs#readme"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/humanwhocodes/humanfs/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "804d5e40d67747efa44f3154a5d1a5a66cbc903643fcc2f21ea0f0aa3915408d0931d2350f9d6ccb51fde7c3cd5d890cdab01a73b7b9fc29c8299ac7b4f87705"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@humanfs/types@0.15.0",
+      "type": "library",
+      "name": "@humanfs/types",
+      "version": "0.15.0",
+      "scope": "optional",
+      "author": "Nicholas C. Zakas",
+      "description": "The TypeScript types for the hfs project.",
+      "purl": "pkg:npm/%40humanfs/types@0.15.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@humanfs/types/-/types-0.15.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/humanwhocodes/humanfs.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/humanwhocodes/humanfs#readme"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/humanwhocodes/humanfs/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "659d70d1aa10930b94b82ed87feeec75e68d7ea42288b71245b7c8d3ca00c6a2eda5742bf402155fb032ec72c3ba22d801a14fbbca0160dabf4088bd5111c9dd"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@humanwhocodes/module-importer@1.0.1",
+      "type": "library",
+      "name": "@humanwhocodes/module-importer",
+      "version": "1.0.1",
+      "scope": "optional",
+      "author": "Nicholas C. Zaks",
+      "description": "Universal module importer for Node.js",
+      "purl": "pkg:npm/%40humanwhocodes/module-importer@1.0.1",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@humanwhocodes/module-importer/-/module-importer-1.0.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/humanwhocodes/module-importer.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "6f1bde57857cbf961be277054d3deb3d281904ea429237cad32e28555549c08b8354144c0d7acfc9744bf7cf22e5aa7d9bd6e7c8412359f9b95a4066b5f7cb7c"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@humanwhocodes/retry@0.4.3",
+      "type": "library",
+      "name": "@humanwhocodes/retry",
+      "version": "0.4.3",
+      "scope": "optional",
+      "author": "Nicholas C. Zaks",
+      "description": "A utility to retry failed async methods.",
+      "purl": "pkg:npm/%40humanwhocodes/retry@0.4.3",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@humanwhocodes/retry/-/retry-0.4.3.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/humanwhocodes/retry.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "6d5d13828f4ae217cf09e93e68c027f35469a452afdb248341e328499baf4c04b2c0d4e7549080ac2644d855aaa6f21ab4abbb54c44b5a547511acef5610f285"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@types/esrecurse@4.3.1",
+      "type": "library",
+      "name": "@types/esrecurse",
+      "version": "4.3.1",
+      "scope": "optional",
+      "description": "TypeScript definitions for esrecurse",
+      "purl": "pkg:npm/%40types/esrecurse@4.3.1",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@types/esrecurse/-/esrecurse-4.3.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/esrecurse"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "c490406c389fa398697df0c1b8797463ccb0b306e2029fd68bb63f1ad0204a5672200069a72babc55b9e38f13c2d440ec5d9608ba66a71eeeea04a6a3537a253"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@types/estree@1.0.9",
+      "type": "library",
+      "name": "@types/estree",
+      "version": "1.0.9",
+      "scope": "optional",
+      "description": "TypeScript definitions for estree",
+      "purl": "pkg:npm/%40types/estree@1.0.9",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@types/estree/-/estree-1.0.9.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/estree"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "1a174f832d5e978fc898fd395f4e54c38730dbf33ddc10949a712f599352b650b310a304e05924f98a680393a21cd426a12ec269f6fc5dadcfc9af26d50af37a"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@types/json-schema@7.0.15",
+      "type": "library",
+      "name": "@types/json-schema",
+      "version": "7.0.15",
+      "scope": "optional",
+      "description": "TypeScript definitions for json-schema",
+      "purl": "pkg:npm/%40types/json-schema@7.0.15",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.15.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/json-schema"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "e7e7cff0ff0c14d0be0326420f1ac1da991914f1b3a90594ce949ebae54bbe6f1531ca2b3586af06aa057312bc6d0cf842c6e7e2850411e9b8c032df732b061c"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "acorn@8.17.0",
+      "type": "library",
+      "name": "acorn",
+      "version": "8.17.0",
+      "scope": "optional",
+      "description": "ECMAScript parser",
+      "purl": "pkg:npm/acorn@8.17.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/acorn/-/acorn-8.17.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/acornjs/acorn.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/acornjs/acorn"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "c5141b0dbf419f00da7d8367e95c25f37f436158ea5d86f55d51ad58067591c0dcea2c002f8860dc1d5d665462b8434578ed87e778051b78a7eb6d4074445502"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "acorn-jsx@5.3.2",
+      "type": "library",
+      "name": "acorn-jsx",
+      "version": "5.3.2",
+      "scope": "optional",
+      "description": "Modern, fast React.js JSX parser",
+      "purl": "pkg:npm/acorn-jsx@5.3.2",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/acorn-jsx/-/acorn-jsx-5.3.2.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/acornjs/acorn-jsx"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/acornjs/acorn-jsx"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "aeaf6cf893617f4202863b435f196527b838d68664e52957b69d0b1f0c80e5c7a3c27eef2a62a9e293eb8ba60478fbf63d4eb9b00b1e81b5ed2229e60c50d781"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "ajv@6.15.0",
+      "type": "library",
+      "name": "ajv",
+      "version": "6.15.0",
+      "scope": "optional",
+      "author": "Evgeny Poberezkin",
+      "description": "Another JSON Schema Validator",
+      "purl": "pkg:npm/ajv@6.15.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/ajv/-/ajv-6.15.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/ajv-validator/ajv.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/ajv-validator/ajv"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/ajv-validator/ajv/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "7e0171ec77e8abad32b4ad9cec386717c8c8bf362038cc5fba08cb3923078cb20f81e9ea6bb4bba1a6a001352af7d995e8862f376b51982d309d3617ea23db33"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "balanced-match@4.0.4",
+      "type": "library",
+      "name": "balanced-match",
+      "version": "4.0.4",
+      "scope": "optional",
+      "description": "Match balanced character pairs, like \"{\" and \"}\"",
+      "purl": "pkg:npm/balanced-match@4.0.4",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/balanced-match/-/balanced-match-4.0.4.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/juliangruber/balanced-match.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "04bae011c453c17da8ea01b118e08dc8cbc64a9df96287ee633c3d87520c4d198aaadb40659554ebb6dd6fd3ebdaf50703cfa3de2dad25f8cee82ebee26c864c"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "brace-expansion@5.0.8",
+      "type": "library",
+      "name": "brace-expansion",
+      "version": "5.0.8",
+      "scope": "optional",
+      "description": "Brace expansion as known from sh/bash",
+      "purl": "pkg:npm/brace-expansion@5.0.8",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/brace-expansion/-/brace-expansion-5.0.8.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/juliangruber/brace-expansion.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "259c83caadc3e005227ca4cf381ec310b7fa5ec07759d3ee3710ada1bd6f1573ec49785d0221c1589fed27c1c073d687f3804afb924564b36424ac771bd93342"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "cross-spawn@7.0.6",
+      "type": "library",
+      "name": "cross-spawn",
+      "version": "7.0.6",
+      "scope": "optional",
+      "author": "André Cruz <andre@moxy.studio>",
+      "description": "Cross platform child_process#spawn and child_process#spawnSync",
+      "purl": "pkg:npm/cross-spawn@7.0.6",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.6.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git@github.com:moxystudio/node-cross-spawn.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/moxystudio/node-cross-spawn"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "b95d903963f69d6ceccb668ca7c69189b862f5d9731791e0879487681f4e893184c834e2249cb1d2ecb9d505ddc966ed00736e6b85c9cd429c6b73b3294777bc"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "debug@4.4.3",
+      "type": "library",
+      "name": "debug",
+      "version": "4.4.3",
+      "scope": "optional",
+      "author": "Josh Junon (https://github.com/qix-)",
+      "description": "Lightweight debugging utility for Node.js and the browser",
+      "purl": "pkg:npm/debug@4.4.3",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/debug/-/debug-4.4.3.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/debug-js/debug.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "446c305a7c10be455f6af295b76d8518bc3ec5849dcc04709b4aeee83853540dee994e6165cdbc57790ee2cb6062bcab4e52e9baf808f468a28e5b408cd6dca8"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "deep-is@0.1.4",
+      "type": "library",
+      "name": "deep-is",
+      "version": "0.1.4",
+      "scope": "optional",
+      "author": "Thorsten Lorenz",
+      "description": "node's assert.deepEqual algorithm except for NaN being equal to NaN",
+      "purl": "pkg:npm/deep-is@0.1.4",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/deep-is/-/deep-is-0.1.4.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "http://github.com/thlorenz/deep-is.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "a083f392c993838fccae289a6063bea245c34fbced9ffc37129b6fffe81221d31d2ac268d2ee027d834524fcbee1228cb82a86c36c319c0f9444c837b7c6bf6d"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "escape-string-regexp@4.0.0",
+      "type": "library",
+      "name": "escape-string-regexp",
+      "version": "4.0.0",
+      "scope": "optional",
+      "author": "Sindre Sorhus",
+      "description": "Escape RegExp special characters",
+      "purl": "pkg:npm/escape-string-regexp@4.0.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "4eda5c349dd7033c771aaf2c591cc96956a346cd2e57103660091d6f58e6d9890fcf81ba7a05050320379f9bed10865e7cf93959ae145db2ae4b97ca90959d80"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "eslint@10.8.0",
+      "type": "library",
+      "name": "eslint",
+      "version": "10.8.0",
+      "scope": "optional",
+      "author": "Nicholas C. Zakas <nicholas+npm@nczconsulting.com>",
+      "description": "An AST-based pattern checker for JavaScript.",
+      "purl": "pkg:npm/eslint@10.8.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/eslint/-/eslint-10.8.0.tgz"
+        },
+        {
+          "type": "website",
+          "url": "https://eslint.org"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "9ee28abcdfa82013b492837b4e6edd9649a791cdb59adb744092f000ace32ead78cba9514dd546dfa3191c9f1e407c1d24cc196d034c94f39879d32afe8549bd"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "eslint-scope@9.1.2",
+      "type": "library",
+      "name": "eslint-scope",
+      "version": "9.1.2",
+      "scope": "optional",
+      "description": "ECMAScript scope analyzer for ESLint",
+      "purl": "pkg:npm/eslint-scope@9.1.2",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/eslint-scope/-/eslint-scope-9.1.2.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/eslint/js.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/eslint/js/blob/main/packages/eslint-scope/README.md"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/eslint/js/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "c52f741f9d5c2b0d2396dc66be61f2d886a2d4b22aadf6f0e7b6fbf70fc9ecc7ef0df90890567e923eb30b7063b54c21d79d07b1249dc5765cb2ebfbda688315"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-2-Clause"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "eslint-visitor-keys@5.0.1",
+      "type": "library",
+      "name": "eslint-visitor-keys",
+      "version": "5.0.1",
+      "scope": "optional",
+      "author": "Toru Nagashima (https://github.com/mysticatea)",
+      "description": "Constants and utilities about visitor keys to traverse AST.",
+      "purl": "pkg:npm/eslint-visitor-keys@5.0.1",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/eslint-visitor-keys/-/eslint-visitor-keys-5.0.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/eslint/js.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/eslint/js/blob/main/packages/eslint-visitor-keys/README.md"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/eslint/js/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "b43e34787c40df98743c421935e223907a034786238c9a77e1b88cd260efa6505efff981f881c2a870c657ba7117eecc9254ef8a085c08f3d90bbca75b28dd4c"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "espree@11.2.0",
+      "type": "library",
+      "name": "espree",
+      "version": "11.2.0",
+      "scope": "optional",
+      "author": "Nicholas C. Zakas <nicholas+npm@nczconsulting.com>",
+      "description": "An Esprima-compatible JavaScript parser built on Acorn",
+      "purl": "pkg:npm/espree@11.2.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/espree/-/espree-11.2.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/eslint/js.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/eslint/js/blob/main/packages/espree/README.md"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/eslint/js/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "ee9dc3ad5108a295b50756af0062ee0928758ee6dcd351f624773c078aaa19b966839808f72ba60600028d6a3826521cd38b9fba0e3127749023c1e44bf460cf"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-2-Clause"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "esquery@1.7.0",
+      "type": "library",
+      "name": "esquery",
+      "version": "1.7.0",
+      "scope": "optional",
+      "author": "Joel Feenstra <jrfeenst+esquery@gmail.com>",
+      "description": "A query library for ECMAScript AST using a CSS selector like query language.",
+      "purl": "pkg:npm/esquery@1.7.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/esquery/-/esquery-1.7.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/estools/esquery.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/estools/esquery/"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "029e86d16430714fcb1ecbcbc0e3757c0417f59a7403663a63f709065f6bfc96d6f74672838ff36c6eb3cca6b639300b10b6ab60798abb41a1a4ce443beed3d2"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "esrecurse@4.3.0",
+      "type": "library",
+      "name": "esrecurse",
+      "version": "4.3.0",
+      "scope": "optional",
+      "description": "ECMAScript AST recursive visitor",
+      "purl": "pkg:npm/esrecurse@4.3.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/esrecurse/-/esrecurse-4.3.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/estools/esrecurse.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/estools/esrecurse"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "2a67ca2f76fa1be457bcff0dd6faf74ead642ffa021609f63585c4b6a3fcfcbde929aa540381bc70555aa05dd2537db7083e17ca947f7df8a81e692d8bafd36a"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-2-Clause"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "estraverse@5.3.0",
+      "type": "library",
+      "name": "estraverse",
+      "version": "5.3.0",
+      "scope": "optional",
+      "description": "ECMAScript JS AST traversal functions",
+      "purl": "pkg:npm/estraverse@5.3.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/estraverse/-/estraverse-5.3.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "http://github.com/estools/estraverse.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/estools/estraverse"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "30c74046e54443388d4de243f0380caa6870475d41450fdc04ffa92ed61d4939dfdcc20ef1f15e8883446d7dfa65d3657d4ffb03d7f7814c38f41de842cbf004"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-2-Clause"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "esutils@2.0.3",
+      "type": "library",
+      "name": "esutils",
+      "version": "2.0.3",
+      "scope": "optional",
+      "description": "utility box for ECMAScript language tools",
+      "purl": "pkg:npm/esutils@2.0.3",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/esutils/-/esutils-2.0.3.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "http://github.com/estools/esutils.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/estools/esutils"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "915b1ca97938382a7af126747648042958baffc8a3df4d0a0564c9ab7d8ffdd61e5934b02b8d56c93c5a94dd5e46603967d514fcb5fd0fb1564a657d480631ea"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-2-Clause"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "fast-deep-equal@3.1.3",
+      "type": "library",
+      "name": "fast-deep-equal",
+      "version": "3.1.3",
+      "scope": "optional",
+      "author": "Evgeny Poberezkin",
+      "description": "Fast deep equal",
+      "purl": "pkg:npm/fast-deep-equal@3.1.3",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/epoberezkin/fast-deep-equal.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/epoberezkin/fast-deep-equal#readme"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/epoberezkin/fast-deep-equal/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "7f7a90f68432f63d808417bf1fd542f75c0b98a042094fe00ce9ca340606e61b303bb04b2a3d3d1dce4760dcfd70623efb19690c22200da8ad56cd3701347ce1"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "fast-json-stable-stringify@2.1.0",
+      "type": "library",
+      "name": "fast-json-stable-stringify",
+      "version": "2.1.0",
+      "scope": "optional",
+      "author": "James Halliday",
+      "description": "deterministic `JSON.stringify()` - a faster version of substack's json-stable-strigify without jsonify",
+      "purl": "pkg:npm/fast-json-stable-stringify@2.1.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/fast-json-stable-stringify/-/fast-json-stable-stringify-2.1.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/epoberezkin/fast-json-stable-stringify.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/epoberezkin/fast-json-stable-stringify"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "96177fc05f8b93df076684c2b6556b687b5f8795d88a32236a55dc93bb1a52db9a9d20f22ccc671e149710326a1f10fb9ac47c0f4b829aa964c23095f31bf01f"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "fast-levenshtein@2.0.6",
+      "type": "library",
+      "name": "fast-levenshtein",
+      "version": "2.0.6",
+      "scope": "optional",
+      "author": "Ramesh Nair <ram@hiddentao.com> (http://www.hiddentao.com/)",
+      "description": "Efficient implementation of Levenshtein algorithm  with locale-specific collator support.",
+      "purl": "pkg:npm/fast-levenshtein@2.0.6",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/hiddentao/fast-levenshtein.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "0c25eee887e1a9c92ced364a6371f1a77cbaaa9858e522599ab58c0eb29c11148e5d641d32153d220fcf62bcf2c3fba5f63388ca1d0de0cd2d6c2e61a1d83c77"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "file-entry-cache@8.0.0",
+      "type": "library",
+      "name": "file-entry-cache",
+      "version": "8.0.0",
+      "scope": "optional",
+      "author": "Jared Wray",
+      "description": "Super simple cache for file metadata, useful for process that work o a given series of files and that only need to repeat the job on the changed ones since the previous run of the process",
+      "purl": "pkg:npm/file-entry-cache@8.0.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/file-entry-cache/-/file-entry-cache-8.0.0.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "5d74d4c02be2b1ae6869c34644ff527cdb5804d00c8be44fc011666e564417b37bb301d8412ebf65f93b491c31e03e63dc21f6d7560d45ca350c430d55f6429d"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "find-up@5.0.0",
+      "type": "library",
+      "name": "find-up",
+      "version": "5.0.0",
+      "scope": "optional",
+      "author": "Sindre Sorhus",
+      "description": "Find a file or directory by walking up parent directories",
+      "purl": "pkg:npm/find-up@5.0.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/find-up/-/find-up-5.0.0.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "efcfcf5d3d7094b2c3813cc3b3bb23abd873cf4bd70fece7fbbc32a447b87d74310a6766a9f1ac10f4319a2092408dda8c557dd5b552b2f36dac94625ba9c69e"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "flat-cache@4.0.1",
+      "type": "library",
+      "name": "flat-cache",
+      "version": "4.0.1",
+      "scope": "optional",
+      "author": "Jared Wray",
+      "description": "A stupidly simple key/value storage using files to persist some data",
+      "purl": "pkg:npm/flat-cache@4.0.1",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/flat-cache/-/flat-cache-4.0.1.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "7fb71c14f2b7497147a71d795081b2449fc525072db8a674cd5b8dddfac1a381e72b771acbd5445b447ac8f6051c2d0082a86e90fcca8eadb6b790e6032a86cb"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "flatted@3.4.3",
+      "type": "library",
+      "name": "flatted",
+      "version": "3.4.3",
+      "scope": "optional",
+      "author": "Andrea Giammarchi",
+      "description": "A super light and fast circular JSON parser.",
+      "purl": "pkg:npm/flatted@3.4.3",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/flatted/-/flatted-3.4.3.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/WebReflection/flatted.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/WebReflection/flatted#readme"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/WebReflection/flatted/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "ff38a95f1c8eeab1afb8d1838942d8f4cbc419291bda0686e06187e3280c8b4659cf23077546419a7b499b1e71d46d95b8fcad0b018de31b093fa730fac2bebd"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "glob-parent@6.0.2",
+      "type": "library",
+      "name": "glob-parent",
+      "version": "6.0.2",
+      "scope": "optional",
+      "author": "Gulp Team <team@gulpjs.com> (https://gulpjs.com/)",
+      "description": "Extract the non-magic parent path from a glob string.",
+      "purl": "pkg:npm/glob-parent@6.0.2",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/glob-parent/-/glob-parent-6.0.2.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "5f1c08f043a1550816a7a8832feddbd2bf3a7f877a017eb3494e791df078c9d084b972d773915c61e3aefa79c67ed4b84c48eeff5d6bb782893d33206df9afe0"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "ignore@5.3.2",
+      "type": "library",
+      "name": "ignore",
+      "version": "5.3.2",
+      "scope": "optional",
+      "author": "kael",
+      "description": "Ignore is a manager and filter for .gitignore rules, the one used by eslint, gitbook and many others.",
+      "purl": "pkg:npm/ignore@5.3.2",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/ignore/-/ignore-5.3.2.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git@github.com:kaelzhang/node-ignore.git"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/kaelzhang/node-ignore/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "86c053354a904c3c245ad71d608da2d3a63f9d4044b0d10324a8d676280bbde832f240ee2404bcb91969924710a721172f467fa630f2e4706632344227682afa"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "imurmurhash@0.1.4",
+      "type": "library",
+      "name": "imurmurhash",
+      "version": "0.1.4",
+      "scope": "optional",
+      "author": "Jens Taylor",
+      "description": "An incremental implementation of MurmurHash3",
+      "purl": "pkg:npm/imurmurhash@0.1.4",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/imurmurhash/-/imurmurhash-0.1.4.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/jensyt/imurmurhash-js"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/jensyt/imurmurhash-js"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/jensyt/imurmurhash-js/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "2665cc67ac2ebc398b88712697dca4cea3ba97015ba1fd061b822470668435d0910c398c5679f2eece47b0880709b6aad30d8cc8f843aa48535204b62d4d8f1c"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "is-extglob@2.1.1",
+      "type": "library",
+      "name": "is-extglob",
+      "version": "2.1.1",
+      "scope": "optional",
+      "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+      "description": "Returns true if a string has an extglob.",
+      "purl": "pkg:npm/is-extglob@2.1.1",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/is-extglob/-/is-extglob-2.1.1.tgz"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/jonschlinkert/is-extglob"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/jonschlinkert/is-extglob/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "49b29b00d90deb4dd58b88c466fe3d2de549327e321b0b1bcd9c28ac4a32122badb0dde725875b3b7eb37e1189e90103a4e6481640ed9eae494719af9778eca1"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "is-glob@4.0.3",
+      "type": "library",
+      "name": "is-glob",
+      "version": "4.0.3",
+      "scope": "optional",
+      "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+      "description": "Returns `true` if the given string looks like a glob pattern or an extglob pattern. This makes it easy to create code that only uses external modules like node-glob when necessary, resulting in much faster code execution and initialization time, and a better user experience.",
+      "purl": "pkg:npm/is-glob@4.0.3",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/is-glob/-/is-glob-4.0.3.tgz"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/micromatch/is-glob"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/micromatch/is-glob/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "c5e9526b21c7dfa66013b6568658bba56df884d6cd97c3a3bf92959a4243e2105d0f7b61f137e4f6f61ab0b33e99758e6611648197f184b4a7af046be1e9524a"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "isexe@2.0.0",
+      "type": "library",
+      "name": "isexe",
+      "version": "2.0.0",
+      "scope": "optional",
+      "author": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)",
+      "description": "Minimal module to check if a file is executable.",
+      "purl": "pkg:npm/isexe@2.0.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/isaacs/isexe.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/isaacs/isexe#readme"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/isaacs/isexe/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "447c4c2e9f659ca1c61d19e0f5016144231b600715a67ebdb2648672addfdfac638155564e18f8aaa2db4cb96aed2b23f01f9f210d44b8210623694ab3241e23"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "json-buffer@3.0.1",
+      "type": "library",
+      "name": "json-buffer",
+      "version": "3.0.1",
+      "scope": "optional",
+      "author": "Dominic Tarr <dominic.tarr@gmail.com> (http://dominictarr.com)",
+      "description": "JSON parse & stringify that supports binary via bops & base64",
+      "purl": "pkg:npm/json-buffer@3.0.1",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/json-buffer/-/json-buffer-3.0.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/dominictarr/json-buffer.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/dominictarr/json-buffer"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "e1b57905f4769aa7d04c99be579b4f3dd7fe669ba1888bd3b8007983c91cad7399a534ff430c15456072c17d68cebea512e3dd6c7c70689966f46ea6236b1f49"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "json-schema-traverse@0.4.1",
+      "type": "library",
+      "name": "json-schema-traverse",
+      "version": "0.4.1",
+      "scope": "optional",
+      "author": "Evgeny Poberezkin",
+      "description": "Traverse JSON Schema passing each schema object to callback",
+      "purl": "pkg:npm/json-schema-traverse@0.4.1",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/json-schema-traverse/-/json-schema-traverse-0.4.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/epoberezkin/json-schema-traverse.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/epoberezkin/json-schema-traverse#readme"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/epoberezkin/json-schema-traverse/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "c5b6c21f9742614e53f0b704861ba1ec727cf075ee5b7aac237634cce64529f6441dca5688753f271ce4eb6f41aec69bfe63221d0b62f7030ffbce3944f7b756"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "json-stable-stringify-without-jsonify@1.0.1",
+      "type": "library",
+      "name": "json-stable-stringify-without-jsonify",
+      "version": "1.0.1",
+      "scope": "optional",
+      "author": "James Halliday",
+      "description": "deterministic JSON.stringify() with custom sorting to get deterministic hashes from stringified results, with no public domain dependencies",
+      "purl": "pkg:npm/json-stable-stringify-without-jsonify@1.0.1",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/json-stable-stringify-without-jsonify/-/json-stable-stringify-without-jsonify-1.0.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/samn/json-stable-stringify.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/samn/json-stable-stringify"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "05d6e8cbe97bb40dce196e858f21475a43f92ee0728f54e4df72e3caad1ac72cdd93dfff2528b6bb77cfd504a677528dc2ae9538a606940bbcec28ac562afa3f"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "keyv@4.5.4",
+      "type": "library",
+      "name": "keyv",
+      "version": "4.5.4",
+      "scope": "optional",
+      "author": "Jared Wray <me@jaredwray.com> (http://jaredwray.com)",
+      "description": "Simple key-value storage with support for multiple backends",
+      "purl": "pkg:npm/keyv@4.5.4",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/keyv/-/keyv-4.5.4.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/jaredwray/keyv.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/jaredwray/keyv"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/jaredwray/keyv/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "a3154790747f1097f608d5e75b144b5ba9a0ec9c82094706d03b441a62f672d528d4f3538a7d4f52297eafffb8af93295600bf7e7d648ecc7b9a34ae8caa88a7"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "levn@0.4.1",
+      "type": "library",
+      "name": "levn",
+      "version": "0.4.1",
+      "scope": "optional",
+      "author": "George Zahariev <z@georgezahariev.com>",
+      "description": "Light ECMAScript (JavaScript) Value Notation - human written, concise, typed, flexible",
+      "purl": "pkg:npm/levn@0.4.1",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/levn/-/levn-0.4.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/gkz/levn.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/gkz/levn"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "f9b4f6b87e04e4b184ee1fe7ddebdc4bfb109495c2a48a7aca6f0e589e5e57afbaec3b2a97f2da693eea24102ddabcdfa1aff94011818710e2c7574cb7691029"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "locate-path@6.0.0",
+      "type": "library",
+      "name": "locate-path",
+      "version": "6.0.0",
+      "scope": "optional",
+      "author": "Sindre Sorhus",
+      "description": "Get the first path that exists on disk of multiple paths",
+      "purl": "pkg:npm/locate-path@6.0.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/locate-path/-/locate-path-6.0.0.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "88f64ae9e6236f146edee078fd667712c10830914ca80a28a65dd1fb3baad148dc026fcc3ba282c1e0e03df3f77a54f3b6828fdcab67547c539f63470520d553"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "minimatch@10.2.5",
+      "type": "library",
+      "name": "minimatch",
+      "version": "10.2.5",
+      "scope": "optional",
+      "author": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me)",
+      "description": "a glob matcher in javascript",
+      "purl": "pkg:npm/minimatch@10.2.5",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/minimatch/-/minimatch-10.2.5.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git@github.com:isaacs/minimatch"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "3142e454b7ca1980c561e8cfd3b40ebab0cb2d0a5c8e4ec5c3eee35d2d91d9ccd1433479eb21d1bde5393432443af887fa111364a4a4224e5cf93db71a315432"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BlueOak-1.0.0"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "ms@2.1.3",
+      "type": "library",
+      "name": "ms",
+      "version": "2.1.3",
+      "scope": "optional",
+      "description": "Tiny millisecond conversion utility",
+      "purl": "pkg:npm/ms@2.1.3",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "e85973b9b4cb646dc9d9afcd542025784863ceae68c601f268253dc985ef70bb2fa1568726afece715c8ebf5d73fab73ed1f7100eb479d23bfb57b45dd645394"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "natural-compare@1.4.0",
+      "type": "library",
+      "name": "natural-compare",
+      "version": "1.4.0",
+      "scope": "optional",
+      "author": "Lauri Rooden (https://github.com/litejs/natural-compare-lite)",
+      "description": "Compare strings containing a mix of letters and numbers in the way a human being would in sort order.",
+      "purl": "pkg:npm/natural-compare@1.4.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/natural-compare/-/natural-compare-1.4.0.tgz"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/litejs/natural-compare-lite/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "396343f1e8b756d342f61ed5eb4a9f7f7495a1b1ebf7de824f0831b9b832418129836f7487d2746eec8408d3497b19059b9b0e6a38791b5d7a45803573c64c4b"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "optionator@0.9.4",
+      "type": "library",
+      "name": "optionator",
+      "version": "0.9.4",
+      "scope": "optional",
+      "author": "George Zahariev <z@georgezahariev.com>",
+      "description": "option parsing and help generation",
+      "purl": "pkg:npm/optionator@0.9.4",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/optionator/-/optionator-0.9.4.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/gkz/optionator.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/gkz/optionator"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "e88a50ee6294c5171934b20e6d1d21cfb971b1aa5248860d649c173c6785d264d5a862852178f50d070ca13db64b744e70bc98febcf43d669667d6b25a669df6"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "p-limit@3.1.0",
+      "type": "library",
+      "name": "p-limit",
+      "version": "3.1.0",
+      "scope": "optional",
+      "author": "Sindre Sorhus",
+      "description": "Run multiple promise-returning & async functions with limited concurrency",
+      "purl": "pkg:npm/p-limit@3.1.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/p-limit/-/p-limit-3.1.0.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "4d839a9ccdf01b0346b193767154d83c0af0e39e319d78f9aa6585d5b12801ce3e714fe897b19587ba1d7af8e9d4534776e1dcdca64c70576ec54e5773ab8945"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "p-locate@5.0.0",
+      "type": "library",
+      "name": "p-locate",
+      "version": "5.0.0",
+      "scope": "optional",
+      "author": "Sindre Sorhus",
+      "description": "Get the first fulfilled promise that satisfies the provided testing function",
+      "purl": "pkg:npm/p-locate@5.0.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/p-locate/-/p-locate-5.0.0.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "2da363b51594058fbecc1e6713f37071aa0cca548f93e4be647341d53cdd6cc24c9f2e9dca7a401aded7fed97f418ab74c8784ea7c47a696e8d8b1b29ab1b93f"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "path-exists@4.0.0",
+      "type": "library",
+      "name": "path-exists",
+      "version": "4.0.0",
+      "scope": "optional",
+      "author": "Sindre Sorhus",
+      "description": "Check if a path exists",
+      "purl": "pkg:npm/path-exists@4.0.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/path-exists/-/path-exists-4.0.0.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "6a4f50cb943b8d86f65b071ecb9169be0d8aa0073f64884b48b392066466ca03ec1b091556dd1f65ad2aaed333fa6ead2530077d943c167981e0c1b82d6cbbff"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "path-key@3.1.1",
+      "type": "library",
+      "name": "path-key",
+      "version": "3.1.1",
+      "scope": "optional",
+      "author": "Sindre Sorhus",
+      "description": "Get the PATH environment variable key cross-platform",
+      "purl": "pkg:npm/path-key@3.1.1",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/path-key/-/path-key-3.1.1.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "a2399e374a9dfb2d23b3312da18e3caf43deab97703049089423aee90e5fe3595f92cc17b8ab58ae18284e92e7c887079b6e1486ac7ee53aa6d889d2c0b844e9"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "prelude-ls@1.2.1",
+      "type": "library",
+      "name": "prelude-ls",
+      "version": "1.2.1",
+      "scope": "optional",
+      "author": "George Zahariev <z@georgezahariev.com>",
+      "description": "prelude.ls is a functionally oriented utility library. It is powerful and flexible. Almost all of its functions are curried. It is written in, and is the recommended base library for, LiveScript.",
+      "purl": "pkg:npm/prelude-ls@1.2.1",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/prelude-ls/-/prelude-ls-1.2.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/gkz/prelude-ls.git"
+        },
+        {
+          "type": "website",
+          "url": "http://preludels.com"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "be47033eb459a354192db9f944b18fa60fd698843ae6aa165a170629ffdbe5ea659246ab5f49bdcfca6909ab789a53aa52c5a9c8db9880edd5472ad81d2cd7e6"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "punycode@2.3.1",
+      "type": "library",
+      "name": "punycode",
+      "version": "2.3.1",
+      "scope": "optional",
+      "author": "Mathias Bynens",
+      "description": "A robust Punycode converter that fully complies to RFC 3492 and RFC 5891, and works on nearly all JavaScript platforms.",
+      "purl": "pkg:npm/punycode@2.3.1",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/punycode/-/punycode-2.3.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/mathiasbynens/punycode.js.git"
+        },
+        {
+          "type": "website",
+          "url": "https://mths.be/punycode"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "bd8b7b503d54f5683ad77f2c84bb4b3af740bbef03b02fe2945b44547707fb0c9d712a4d136d007d239db9fe8c91115a84be4563b5f5a14ee7295645b5fabc16"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "shebang-command@2.0.0",
+      "type": "library",
+      "name": "shebang-command",
+      "version": "2.0.0",
+      "scope": "optional",
+      "author": "Kevin Mårtensson",
+      "description": "Get the command from a shebang",
+      "purl": "pkg:npm/shebang-command@2.0.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/shebang-command/-/shebang-command-2.0.0.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "907c6bdb366962d766acdd6a0e3aeb5ff675ad1d641bc0f1fa09292b51b87979af5ecc26704d614d6056614ce5ada630d7fc99a7a62e0d8efb62dbdb3747660c"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "shebang-regex@3.0.0",
+      "type": "library",
+      "name": "shebang-regex",
+      "version": "3.0.0",
+      "scope": "optional",
+      "author": "Sindre Sorhus",
+      "description": "Regular expression for matching a shebang line",
+      "purl": "pkg:npm/shebang-regex@3.0.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/shebang-regex/-/shebang-regex-3.0.0.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "efef9d161b5cc77df9dee05aabc0c347836ec417ad0730bb6503a19934089c711de9b4ab5dd884cb30af1b4ed9e3851874b4a1594c97b7933fca1cfc7a471bd4"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "type-check@0.4.0",
+      "type": "library",
+      "name": "type-check",
+      "version": "0.4.0",
+      "scope": "optional",
+      "author": "George Zahariev <z@georgezahariev.com>",
+      "description": "type-check allows you to check the types of JavaScript values at runtime with a Haskell like type syntax.",
+      "purl": "pkg:npm/type-check@0.4.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/type-check/-/type-check-0.4.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/gkz/type-check.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/gkz/type-check"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "5e5794a1cf6ec065ea8d6c176944d9026ccc705679f39f10036befc7552be7121c8b15c83fef0b9c50e0469954df4bacead7aa765b2415fbbe69ee0aefd3a87b"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "uri-js@4.4.1",
+      "type": "library",
+      "name": "uri-js",
+      "version": "4.4.1",
+      "scope": "optional",
+      "author": "Gary Court <gary.court@gmail.com>",
+      "description": "An RFC 3986/3987 compliant, scheme extendable URI/IRI parsing/validating/resolving library for JavaScript.",
+      "purl": "pkg:npm/uri-js@4.4.1",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/uri-js/-/uri-js-4.4.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "http://github.com/garycourt/uri-js"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/garycourt/uri-js"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/garycourt/uri-js/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "eeb294cb2df7435c9cf7ca50d430262edc17d74f45ed321f5a55b561da3c5a5d628b549e1e279e8741c77cf78bd9f3172bacf4b3c79c2acf5fac2b8b26f9dd06"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-2-Clause"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "which@2.0.2",
+      "type": "library",
+      "name": "which",
+      "version": "2.0.2",
+      "scope": "optional",
+      "author": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me)",
+      "description": "Like which(1) unix command. Find the first instance of an executable in the PATH.",
+      "purl": "pkg:npm/which@2.0.2",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/which/-/which-2.0.2.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/isaacs/node-which.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "04b2374e5d535b73ef97bd25df2ab763ae22f9ac29c17aac181616924a8cb676d782b303fb28fbae15b492e103c7325a6171a3116e6881aa4a34c10a34c8e26c"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "word-wrap@1.2.5",
+      "type": "library",
+      "name": "word-wrap",
+      "version": "1.2.5",
+      "scope": "optional",
+      "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+      "description": "Wrap words to a specified length.",
+      "purl": "pkg:npm/word-wrap@1.2.5",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/word-wrap/-/word-wrap-1.2.5.tgz"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/jonschlinkert/word-wrap"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/jonschlinkert/word-wrap/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "04ddb607979a30c23d50cb63ac677983978260fa423c3532d052576d8b1a4f9cd8c6314e7244b9dd2403137a56915a16a475d56f706b61c10de13c1ae7907970"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "yocto-queue@0.1.0",
+      "type": "library",
+      "name": "yocto-queue",
+      "version": "0.1.0",
+      "scope": "optional",
+      "author": "Sindre Sorhus",
+      "description": "Tiny queue data structure",
+      "purl": "pkg:npm/yocto-queue@0.1.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "development"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/yocto-queue/-/yocto-queue-0.1.0.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "ad592cbec9cd09d27fa2119ceb180fc3237c7a1782c6c88b33c9b1b84fedfe6395a897b03ee3b59a22e94c74224604ca08b7b12f831e00555a82db3b1e6359d9"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "openwrt:package:firewall4",
+      "name": "firewall4",
+      "scope": "required",
+      "properties": [
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "runtime"
+        },
+        {
+          "name": "familycontrol:version-status",
+          "value": "resolved-by-openwrt-apk"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "openwrt:package:luci-base",
+      "name": "luci-base",
+      "scope": "required",
+      "properties": [
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "runtime"
+        },
+        {
+          "name": "familycontrol:version-status",
+          "value": "resolved-by-openwrt-apk"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "openwrt:package:rpcd-mod-ucode",
+      "name": "rpcd-mod-ucode",
+      "scope": "required",
+      "properties": [
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "runtime"
+        },
+        {
+          "name": "familycontrol:version-status",
+          "value": "resolved-by-openwrt-apk"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "openwrt:package:shadow-useradd",
+      "name": "shadow-useradd",
+      "scope": "required",
+      "properties": [
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "runtime"
+        },
+        {
+          "name": "familycontrol:version-status",
+          "value": "resolved-by-openwrt-apk"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "openwrt:package:ucode-mod-uci",
+      "name": "ucode-mod-uci",
+      "scope": "required",
+      "properties": [
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "runtime"
+        },
+        {
+          "name": "familycontrol:version-status",
+          "value": "resolved-by-openwrt-apk"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "openwrt:package:wget-ssl",
+      "name": "wget-ssl",
+      "scope": "required",
+      "properties": [
+        {
+          "name": "familycontrol:dependency-kind",
+          "value": "runtime"
+        },
+        {
+          "name": "familycontrol:version-status",
+          "value": "resolved-by-openwrt-apk"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "@eslint-community/eslint-utils@4.10.1",
+      "dependsOn": [
+        "eslint@10.8.0",
+        "eslint-visitor-keys@3.4.3"
+      ]
+    },
+    {
+      "ref": "@eslint-community/regexpp@4.12.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "@eslint/config-array@0.23.5",
+      "dependsOn": [
+        "@eslint/object-schema@3.0.5",
+        "debug@4.4.3",
+        "minimatch@10.2.5"
+      ]
+    },
+    {
+      "ref": "@eslint/config-helpers@0.7.0",
+      "dependsOn": [
+        "@eslint/core@1.2.1"
+      ]
+    },
+    {
+      "ref": "@eslint/core@1.2.1",
+      "dependsOn": [
+        "@types/json-schema@7.0.15"
+      ]
+    },
+    {
+      "ref": "@eslint/js@10.0.1",
+      "dependsOn": [
+        "eslint@10.8.0"
+      ]
+    },
+    {
+      "ref": "@eslint/object-schema@3.0.5",
+      "dependsOn": []
+    },
+    {
+      "ref": "@eslint/plugin-kit@0.7.2",
+      "dependsOn": [
+        "@eslint/core@1.2.1",
+        "levn@0.4.1"
+      ]
+    },
+    {
+      "ref": "@humanfs/core@0.19.2",
+      "dependsOn": [
+        "@humanfs/types@0.15.0"
+      ]
+    },
+    {
+      "ref": "@humanfs/node@0.16.8",
+      "dependsOn": [
+        "@humanwhocodes/retry@0.4.3",
+        "@humanfs/core@0.19.2",
+        "@humanfs/types@0.15.0"
+      ]
+    },
+    {
+      "ref": "@humanfs/types@0.15.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "@humanwhocodes/module-importer@1.0.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "@humanwhocodes/retry@0.4.3",
+      "dependsOn": []
+    },
+    {
+      "ref": "@types/esrecurse@4.3.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "@types/estree@1.0.9",
+      "dependsOn": []
+    },
+    {
+      "ref": "@types/json-schema@7.0.15",
+      "dependsOn": []
+    },
+    {
+      "ref": "acorn-jsx@5.3.2",
+      "dependsOn": [
+        "acorn@8.17.0"
+      ]
+    },
+    {
+      "ref": "acorn@8.17.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "ajv@6.15.0",
+      "dependsOn": [
+        "fast-deep-equal@3.1.3",
+        "fast-json-stable-stringify@2.1.0",
+        "json-schema-traverse@0.4.1",
+        "uri-js@4.4.1"
+      ]
+    },
+    {
+      "ref": "balanced-match@4.0.4",
+      "dependsOn": []
+    },
+    {
+      "ref": "brace-expansion@5.0.8",
+      "dependsOn": [
+        "balanced-match@4.0.4"
+      ]
+    },
+    {
+      "ref": "cross-spawn@7.0.6",
+      "dependsOn": [
+        "path-key@3.1.1",
+        "shebang-command@2.0.0",
+        "which@2.0.2"
+      ]
+    },
+    {
+      "ref": "debug@4.4.3",
+      "dependsOn": [
+        "ms@2.1.3"
+      ]
+    },
+    {
+      "ref": "deep-is@0.1.4",
+      "dependsOn": []
+    },
+    {
+      "ref": "escape-string-regexp@4.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "eslint-scope@9.1.2",
+      "dependsOn": [
+        "@types/esrecurse@4.3.1",
+        "@types/estree@1.0.9",
+        "esrecurse@4.3.0",
+        "estraverse@5.3.0"
+      ]
+    },
+    {
+      "ref": "eslint-visitor-keys@3.4.3",
+      "dependsOn": []
+    },
+    {
+      "ref": "eslint-visitor-keys@5.0.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "eslint@10.8.0",
+      "dependsOn": [
+        "@eslint-community/eslint-utils@4.10.1",
+        "@eslint-community/regexpp@4.12.2",
+        "@eslint/config-array@0.23.5",
+        "@eslint/config-helpers@0.7.0",
+        "@eslint/core@1.2.1",
+        "@eslint/plugin-kit@0.7.2",
+        "@humanfs/node@0.16.8",
+        "@humanwhocodes/module-importer@1.0.1",
+        "@humanwhocodes/retry@0.4.3",
+        "@types/estree@1.0.9",
+        "ajv@6.15.0",
+        "cross-spawn@7.0.6",
+        "debug@4.4.3",
+        "escape-string-regexp@4.0.0",
+        "eslint-scope@9.1.2",
+        "eslint-visitor-keys@5.0.1",
+        "espree@11.2.0",
+        "esquery@1.7.0",
+        "esutils@2.0.3",
+        "fast-deep-equal@3.1.3",
+        "file-entry-cache@8.0.0",
+        "find-up@5.0.0",
+        "glob-parent@6.0.2",
+        "ignore@5.3.2",
+        "imurmurhash@0.1.4",
+        "is-glob@4.0.3",
+        "json-stable-stringify-without-jsonify@1.0.1",
+        "minimatch@10.2.5",
+        "natural-compare@1.4.0",
+        "optionator@0.9.4"
+      ]
+    },
+    {
+      "ref": "espree@11.2.0",
+      "dependsOn": [
+        "acorn@8.17.0",
+        "acorn-jsx@5.3.2",
+        "eslint-visitor-keys@5.0.1"
+      ]
+    },
+    {
+      "ref": "esquery@1.7.0",
+      "dependsOn": [
+        "estraverse@5.3.0"
+      ]
+    },
+    {
+      "ref": "esrecurse@4.3.0",
+      "dependsOn": [
+        "estraverse@5.3.0"
+      ]
+    },
+    {
+      "ref": "estraverse@5.3.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "esutils@2.0.3",
+      "dependsOn": []
+    },
+    {
+      "ref": "fast-deep-equal@3.1.3",
+      "dependsOn": []
+    },
+    {
+      "ref": "fast-json-stable-stringify@2.1.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "fast-levenshtein@2.0.6",
+      "dependsOn": []
+    },
+    {
+      "ref": "file-entry-cache@8.0.0",
+      "dependsOn": [
+        "flat-cache@4.0.1"
+      ]
+    },
+    {
+      "ref": "find-up@5.0.0",
+      "dependsOn": [
+        "locate-path@6.0.0",
+        "path-exists@4.0.0"
+      ]
+    },
+    {
+      "ref": "flat-cache@4.0.1",
+      "dependsOn": [
+        "flatted@3.4.3",
+        "keyv@4.5.4"
+      ]
+    },
+    {
+      "ref": "flatted@3.4.3",
+      "dependsOn": []
+    },
+    {
+      "ref": "glob-parent@6.0.2",
+      "dependsOn": [
+        "is-glob@4.0.3"
+      ]
+    },
+    {
+      "ref": "ignore@5.3.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "imurmurhash@0.1.4",
+      "dependsOn": []
+    },
+    {
+      "ref": "is-extglob@2.1.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "is-glob@4.0.3",
+      "dependsOn": [
+        "is-extglob@2.1.1"
+      ]
+    },
+    {
+      "ref": "isexe@2.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "json-buffer@3.0.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "json-schema-traverse@0.4.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "json-stable-stringify-without-jsonify@1.0.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "keyv@4.5.4",
+      "dependsOn": [
+        "json-buffer@3.0.1"
+      ]
+    },
+    {
+      "ref": "levn@0.4.1",
+      "dependsOn": [
+        "prelude-ls@1.2.1",
+        "type-check@0.4.0"
+      ]
+    },
+    {
+      "ref": "locate-path@6.0.0",
+      "dependsOn": [
+        "p-locate@5.0.0"
+      ]
+    },
+    {
+      "ref": "minimatch@10.2.5",
+      "dependsOn": [
+        "brace-expansion@5.0.8"
+      ]
+    },
+    {
+      "ref": "ms@2.1.3",
+      "dependsOn": []
+    },
+    {
+      "ref": "natural-compare@1.4.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "openwrt:package:firewall4",
+      "dependsOn": []
+    },
+    {
+      "ref": "openwrt:package:luci-base",
+      "dependsOn": []
+    },
+    {
+      "ref": "openwrt:package:rpcd-mod-ucode",
+      "dependsOn": []
+    },
+    {
+      "ref": "openwrt:package:shadow-useradd",
+      "dependsOn": []
+    },
+    {
+      "ref": "openwrt:package:ucode-mod-uci",
+      "dependsOn": []
+    },
+    {
+      "ref": "openwrt:package:wget-ssl",
+      "dependsOn": []
+    },
+    {
+      "ref": "optionator@0.9.4",
+      "dependsOn": [
+        "prelude-ls@1.2.1",
+        "deep-is@0.1.4",
+        "word-wrap@1.2.5",
+        "type-check@0.4.0",
+        "levn@0.4.1",
+        "fast-levenshtein@2.0.6"
+      ]
+    },
+    {
+      "ref": "p-limit@3.1.0",
+      "dependsOn": [
+        "yocto-queue@0.1.0"
+      ]
+    },
+    {
+      "ref": "p-locate@5.0.0",
+      "dependsOn": [
+        "p-limit@3.1.0"
+      ]
+    },
+    {
+      "ref": "path-exists@4.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "path-key@3.1.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:generic/familycontrol@0.1.0-r13",
+      "dependsOn": [
+        "@eslint/js@10.0.1",
+        "eslint@10.8.0",
+        "openwrt:package:firewall4",
+        "openwrt:package:luci-base",
+        "openwrt:package:rpcd-mod-ucode",
+        "openwrt:package:shadow-useradd",
+        "openwrt:package:ucode-mod-uci",
+        "openwrt:package:wget-ssl"
+      ]
+    },
+    {
+      "ref": "prelude-ls@1.2.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "punycode@2.3.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "shebang-command@2.0.0",
+      "dependsOn": [
+        "shebang-regex@3.0.0"
+      ]
+    },
+    {
+      "ref": "shebang-regex@3.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "type-check@0.4.0",
+      "dependsOn": [
+        "prelude-ls@1.2.1"
+      ]
+    },
+    {
+      "ref": "uri-js@4.4.1",
+      "dependsOn": [
+        "punycode@2.3.1"
+      ]
+    },
+    {
+      "ref": "which@2.0.2",
+      "dependsOn": [
+        "isexe@2.0.0"
+      ]
+    },
+    {
+      "ref": "word-wrap@1.2.5",
+      "dependsOn": []
+    },
+    {
+      "ref": "yocto-queue@0.1.0",
+      "dependsOn": []
+    }
+  ]
+}

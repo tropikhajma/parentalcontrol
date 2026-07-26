@@ -119,6 +119,9 @@ not reduce the web code and endpoints exposed on that origin.
   ten-second timeout and access-control operations continue locally.
 - The Grafana authorization value is written to a mode `0600` temporary file,
   is not placed in process arguments, and is removed after each attempt.
+- A deterministic CycloneDX SBOM records the locked npm development graph and
+  declared OpenWrt runtime packages; CI rejects a stale SBOM and retains it as
+  an artifact.
 - Passive ZAP testing is local and its reports are excluded from Git.
 
 ## Prioritized risk register
@@ -299,9 +302,11 @@ version tags rather than immutable commit SHAs, the ZAP image uses the mutable
 A compromised build input could produce router-privileged code.
 
 **Mitigation:** Sign release packages, publish checksums and provenance, pin CI
-actions and container images by digest, keep lock files, generate an SBOM, and
-separate release signing from CI build credentials. Treat local development
-packages as non-production artifacts.
+actions and container images by digest, keep lock files, and separate release
+signing from CI build credentials. Retain the checked-in CycloneDX SBOM, and
+augment release SBOMs with the exact OpenWrt dependency versions resolved by
+the package build or target installation. Treat local development packages as
+non-production artifacts.
 
 ### R13 — Router is a single enforcement and administration failure domain
 
