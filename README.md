@@ -65,23 +65,33 @@ The baseline scan is unauthenticated, so it covers the login page and other
 publicly reachable resources. Do not put the Family Control password in this
 script or commit it to the repository.
 
+## Privacy-safe telemetry
+
+Release `r10` adds an optional, disabled-by-default OpenTelemetry metrics
+exporter for Grafana Cloud. It reports aggregate Family Control enforcement
+health and basic router health without exporting names, MAC addresses, IP
+addresses, hostnames, or browsing activity.
+
+See [docs/telemetry.md](docs/telemetry.md) for the metric catalog, Grafana
+configuration, secret handling, dashboard import, and operational behavior.
+
 ## Installing a development build
 
 The package built for OpenWrt 25.12.4 is:
 
 ```text
-dist/luci-app-familycontrol-0.1.0-r9.apk
-SHA-256: d3ab18dfecc29b8ddd9962a66bb284482d3f603c1c4c59576627f8dc2d54c34c
+dist/luci-app-familycontrol-0.1.0-r10.apk
+SHA-256: a6ff31f17699201a7587e0609cbb1efc85819f094bc2316c1b1783fcbc213622
 ```
 
 Copy it to the router, install it, and restart rpcd:
 
 ```sh
 ssh root@openwrt \
-  'cat > /tmp/luci-app-familycontrol-0.1.0-r9.apk' \
-  < dist/luci-app-familycontrol-0.1.0-r9.apk
+  'cat > /tmp/luci-app-familycontrol-0.1.0-r10.apk' \
+  < dist/luci-app-familycontrol-0.1.0-r10.apk
 ssh root@openwrt
-apk add --allow-untrusted /tmp/luci-app-familycontrol-0.1.0-r9.apk
+apk add --allow-untrusted /tmp/luci-app-familycontrol-0.1.0-r10.apk
 /etc/init.d/rpcd restart
 ```
 

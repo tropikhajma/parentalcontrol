@@ -1,0 +1,74 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+set -u
+
+# shellcheck source=/dev/null
+. /lib/functions.sh
+
+config_load familycontrol_telemetry
+config_get_bool enabled main enabled 0
+config_get endpoint main endpoint
+config_get instance_id main instance_id
+config_get api_token main api_token
+
+[ "$enabled" -eq 1 ] || exit 0
+
+case "$endpoint" in
+	https://*) ;;
+	*)
+		logger -t familycontrol-telemetry "OTLP endpoint must use HTTPS"
+		exit 1
+		;;
+esac
+
+[ -n "$instance_id" ] && [ -n "$api_token" ] || {
+	logger -t familycontrol-telemetry "OTLP credentials are not configured"
+	exit 1
+}
+
+case "$instance_id$api_token" in
+	*'
+'*)
+		logger -t familycontrol-telemetry "OTLP credentials contain an invalid newline"
+		exit 1
+		;;
+esac
+
+work_dir="/tmp/familycontrol-otel.$$"
+payload="$work_dir/metrics.json"
+wget_config="$work_dir/wget.conf"
+mkdir -m 0700 "$work_dir" || exit 1
+trap 'rm -rf "$work_dir"' EXIT INT TERM
+
+/usr/libexec/familycontrol-otel-payload >"$payload" || exit 1
+
+{
+	printf 'user=%s\n' "$instance_id"
+	printf 'password=%s\n' "$api_token"
+} >"$wget_config"
+chmod 0600 "$wget_config"
+
+case "$endpoint" in
+	*/v1/metrics) metrics_endpoint="$endpoint" ;;
+	*/) metrics_endpoint="${endpoint}v1/metrics" ;;
+	*) metrics_endpoint="${endpoint}/v1/metrics" ;;
+esac
+
+if wget --quiet --timeout=10 --tries=1 \
+		--config="$wget_config" \
+		--header='Content-Type: application/json' \
+		--post-file="$payload" \
+		--output-document=/dev/null \
+		"$metrics_endpoint"; then
+	date +%s >/tmp/familycontrol-otel-last-success
+	exit 0
+fi
+
+failures="$(cat /tmp/familycontrol-otel-export-failures 2>/dev/null || echo 0)"
+case "$failures" in
+	''|*[!0-9]*) failures=0 ;;
+esac
+echo $((failures + 1)) >/tmp/familycontrol-otel-export-failures
+logger -t familycontrol-telemetry "OTLP metrics export failed"
+exit 1

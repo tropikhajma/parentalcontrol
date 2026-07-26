@@ -2,10 +2,12 @@
 
 'use strict';
 
-import { readfile } from 'fs';
+import { readfile, writefile } from 'fs';
 import { cursor } from 'uci';
 
 const FIREWALL_PREFIX = 'familycontrol_';
+const TELEMETRY_STATE = '/tmp/familycontrol-telemetry.json';
+const DURATION_BOUNDS = [ 0.1, 0.25, 0.5, 1, 2, 5 ];
 const PERSON_ID_PATTERN = /^[A-Za-z0-9_]+$/;
 const MAC_PATTERN = /^[0-9A-F]{2}(:[0-9A-F]{2}){5}$/;
 
@@ -19,6 +21,50 @@ function fail(code, message) {
 
 function normalizeMac(value) {
 	return uc(value || '');
+}
+
+function monotonicSeconds() {
+	const value = clock(true);
+
+	return value[0] + value[1] / 1000000000;
+}
+
+function recordAction(action, result, duration, firewallFailed) {
+	let state = {};
+
+	try {
+		state = json(readfile(TELEMETRY_STATE) || '{}') || {};
+	}
+	catch (_) {
+		state = {};
+	}
+
+	state.actions ||= {};
+	const key = action + '.' + result;
+	const metric = state.actions[key] || {
+		count: 0,
+		duration_sum: 0,
+		buckets: [ 0, 0, 0, 0, 0, 0, 0 ]
+	};
+	let bucket = length(DURATION_BOUNDS);
+
+	for (let i = 0; i < length(DURATION_BOUNDS); i++) {
+		if (duration <= DURATION_BOUNDS[i]) {
+			bucket = i;
+			break;
+		}
+	}
+
+	metric.count++;
+	metric.duration_sum += duration;
+	metric.buckets[bucket]++;
+	state.actions[key] = metric;
+
+	if (firewallFailed)
+		state.firewall_reload_failures = (state.firewall_reload_failures || 0) + 1;
+
+	/* Telemetry is best effort and must never decide the control result. */
+	writefile(TELEMETRY_STATE, sprintf('%J', state));
 }
 
 function findPerson(ctx, personId) {
@@ -156,28 +202,39 @@ function setPaused(request) {
 	const personId = request.args.person;
 	const paused = request.args.paused;
 	const ctx = cursor();
+	const started = monotonicSeconds();
+	const action = paused ? 'pause' : 'resume';
 
-	if (!match(personId, PERSON_ID_PATTERN))
+	if (!match(personId, PERSON_ID_PATTERN)) {
+		recordAction(action, 'error', monotonicSeconds() - started, false);
 		return fail('invalid_person', 'Invalid person identifier');
+	}
 
 	const person = findPerson(ctx, personId);
 
-	if (!person)
+	if (!person) {
+		recordAction(action, 'error', monotonicSeconds() - started, false);
 		return fail('person_not_found', 'Person does not exist');
+	}
 
 	const devices = personDevices(ctx, personId);
 
-	if (paused && !length(devices))
+	if (paused && !length(devices)) {
+		recordAction(action, 'error', monotonicSeconds() - started, false);
 		return fail('no_devices', 'Assign at least one valid device before pausing');
+	}
 
 	const settings = ctx.get_all('familycontrol', 'main') || {};
 	const exitCode = applyFirewallRule(ctx, personId, devices, paused, settings);
 
-	if (exitCode != 0)
+	if (exitCode != 0) {
+		recordAction(action, 'error', monotonicSeconds() - started, true);
 		return fail('firewall_reload_failed', 'Firewall rejected the generated rule');
+	}
 
 	ctx.set('familycontrol', personId, 'paused', paused ? '1' : '0');
 	ctx.commit('familycontrol');
+	recordAction(action, 'ok', monotonicSeconds() - started, false);
 
 	return {
 		ok: true,

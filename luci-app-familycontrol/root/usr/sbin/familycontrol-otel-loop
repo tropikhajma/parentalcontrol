@@ -1,0 +1,21 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+set -u
+
+# shellcheck source=/dev/null
+. /lib/functions.sh
+
+while true; do
+	/usr/sbin/familycontrol-otel-export
+
+	config_load familycontrol_telemetry
+	config_get interval main interval 60
+
+	case "$interval" in
+		''|*[!0-9]*) interval=60 ;;
+	esac
+
+	[ "$interval" -ge 30 ] 2>/dev/null || interval=30
+	sleep "$interval"
+done

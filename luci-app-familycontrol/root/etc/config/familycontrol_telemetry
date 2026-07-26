@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+config otlp 'main'
+	option enabled '0'
+	option endpoint ''
+	option instance_id ''
+	option api_token ''
+	option interval '60'

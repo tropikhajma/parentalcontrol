@@ -1,0 +1,269 @@
+#!/usr/bin/ucode
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+import { popen, readfile } from 'fs';
+import { cursor } from 'uci';
+
+const FIREWALL_PREFIX = 'familycontrol_';
+const TELEMETRY_STATE = '/tmp/familycontrol-telemetry.json';
+const DURATION_BOUNDS = [ 0.1, 0.25, 0.5, 1, 2, 5 ];
+const MAC_PATTERN = /^[0-9A-F]{2}(:[0-9A-F]{2}){5}$/;
+
+function attribute(key, value) {
+	return {
+		key,
+		value: { stringValue: `${value}` }
+	};
+}
+
+function point(value, now, attributes) {
+	attributes ||= [];
+	const result = {
+		attributes,
+		timeUnixNano: now
+	};
+
+	if (type(value) == 'int')
+		result.asInt = `${value}`;
+	else
+		result.asDouble = value;
+
+	return result;
+}
+
+function gauge(name, description, unit, value, now, attributes) {
+	return {
+		name,
+		description,
+		unit,
+		gauge: {
+			dataPoints: [ point(value, now, attributes) ]
+		}
+	};
+}
+
+function counter(name, description, unit, value, start, now, attributes) {
+	const data = point(value, now, attributes);
+	data.startTimeUnixNano = start;
+
+	return {
+		name,
+		description,
+		unit,
+		sum: {
+			aggregationTemporality: 2,
+			isMonotonic: true,
+			dataPoints: [ data ]
+		}
+	};
+}
+
+function normalizedMacs(value) {
+	let result = [];
+
+	for (let mac in (type(value) == 'array' ? value : [ value ])) {
+		mac = uc(mac || '');
+		if (match(mac, MAC_PATTERN))
+			push(result, mac);
+	}
+
+	return sort(result);
+}
+
+function arraysEqual(left, right) {
+	if (length(left) != length(right))
+		return false;
+
+	for (let i = 0; i < length(left); i++)
+		if (left[i] != right[i])
+			return false;
+
+	return true;
+}
+
+function parseIntegerFile(path) {
+	const value = trim(readfile(path) || '0');
+	return match(value, /^[0-9]+$/) ? +value : 0;
+}
+
+function loadState() {
+	try {
+		return json(readfile(TELEMETRY_STATE) || '{}') || {};
+	}
+	catch (_) {
+		return {};
+	}
+}
+
+function bootTime() {
+	const stat = readfile('/proc/stat') || '';
+	const found = match(stat, /(^|\n)btime ([0-9]+)/);
+
+	return found ? +found[2] : time();
+}
+
+function memoryUtilization() {
+	const info = readfile('/proc/meminfo') || '';
+	const total = match(info, /(^|\n)MemTotal:[ \t]+([0-9]+)/);
+	const available = match(info, /(^|\n)MemAvailable:[ \t]+([0-9]+)/);
+
+	if (!total || !available || +total[2] <= 0)
+		return 0;
+
+	return 1 - (+available[2] / (+total[2] * 1.0));
+}
+
+function overlayUtilization() {
+	const process = popen('df -P /overlay', 'r');
+	const output = process.read('all') || '';
+	process.close();
+	const found = match(output, /\n[^ \n]+[ \t]+[0-9]+[ \t]+[0-9]+[ \t]+[0-9]+[ \t]+([0-9]+)%/);
+
+	return found ? +found[1] / 100.0 : 0;
+}
+
+const ctx = cursor();
+const nowSeconds = time();
+const now = `${nowSeconds}000000000`;
+const start = `${bootTime()}000000000`;
+const uptime = +(split(readfile('/proc/uptime') || '0 ', ' ')[0] || 0);
+const load = +(split(readfile('/proc/loadavg') || '0 ', ' ')[0] || 0);
+const leases = readfile('/tmp/dhcp.leases') || '';
+const state = loadState();
+let metrics = [];
+let people = {};
+let personCount = 0;
+let pausedCount = 0;
+let deviceCount = 0;
+let connected = {};
+let expectedRules = {};
+let actualRules = {};
+let drift = false;
+
+ctx.foreach('familycontrol', 'person', section => {
+	const id = section['.name'];
+	people[id] = {
+		paused: section.paused == '1',
+		macs: []
+	};
+	personCount++;
+	if (people[id].paused)
+		pausedCount++;
+});
+
+ctx.foreach('familycontrol', 'device', section => {
+	const mac = uc(section.mac || '');
+	const person = people[section.person];
+
+	deviceCount++;
+	if (person && match(mac, MAC_PATTERN))
+		push(person.macs, mac);
+});
+
+for (let id, person in people) {
+	if (person.paused && length(person.macs))
+		expectedRules[FIREWALL_PREFIX + id] = sort(person.macs);
+}
+
+ctx.foreach('firewall', 'rule', section => {
+	const id = section['.name'];
+	if (substr(id, 0, length(FIREWALL_PREFIX)) == FIREWALL_PREFIX)
+		actualRules[id] = normalizedMacs(section.src_mac);
+});
+
+for (let id, macs in expectedRules)
+	if (!actualRules[id] || !arraysEqual(macs, actualRules[id]))
+		drift = true;
+
+for (let id in actualRules)
+	if (!expectedRules[id])
+		drift = true;
+
+for (let line in split(trim(leases), '\n')) {
+	const fields = split(line, /[ \t]+/);
+	const mac = uc(fields[1] || '');
+	if (match(mac, MAC_PATTERN))
+		connected[mac] = true;
+}
+
+push(metrics, gauge('familycontrol.people', 'Configured people', '{person}', personCount, now));
+push(metrics, gauge('familycontrol.devices', 'Configured devices', '{device}', deviceCount, now));
+push(metrics, gauge('familycontrol.devices.connected', 'Connected DHCP devices', '{device}',
+	length(keys(connected)), now));
+push(metrics, gauge('familycontrol.people.paused', 'Paused people', '{person}', pausedCount, now));
+push(metrics, gauge('familycontrol.enforcement.expected_rules', 'Expected generated firewall rules',
+	'{rule}', length(keys(expectedRules)), now));
+push(metrics, gauge('familycontrol.enforcement.actual_rules', 'Actual generated firewall rules',
+	'{rule}', length(keys(actualRules)), now));
+push(metrics, gauge('familycontrol.enforcement.drift', 'Desired and firewall state differ',
+	'1', drift ? 1 : 0, now));
+push(metrics, counter('familycontrol.firewall.reload.failures',
+	'Failed firewall reload attempts', '{failure}',
+	state.firewall_reload_failures || 0, start, now));
+push(metrics, counter('familycontrol.telemetry.export.failures',
+	'Failed OTLP export attempts', '{failure}',
+	parseIntegerFile('/tmp/familycontrol-otel-export-failures'), start, now));
+
+const lastSuccess = parseIntegerFile('/tmp/familycontrol-otel-last-success');
+push(metrics, gauge('familycontrol.telemetry.last_success.age',
+	'Seconds since the last successful OTLP export', 's',
+	lastSuccess ? nowSeconds - lastSuccess : uptime, now));
+
+for (let key, actionState in (state.actions || {})) {
+	const parts = split(key, '.');
+	const attributes = [
+		attribute('familycontrol.action', parts[0]),
+		attribute('familycontrol.result', parts[1])
+	];
+	const bucketCounts = map(actionState.buckets || [], value => `${value}`);
+
+	while (length(bucketCounts) < length(DURATION_BOUNDS) + 1)
+		push(bucketCounts, '0');
+
+	push(metrics, counter('familycontrol.action.count', 'Pause and resume attempts',
+		'{action}', actionState.count || 0, start, now, attributes));
+	push(metrics, {
+		name: 'familycontrol.action.duration',
+		description: 'Pause and resume duration',
+		unit: 's',
+		histogram: {
+			aggregationTemporality: 2,
+			dataPoints: [ {
+				attributes,
+				startTimeUnixNano: start,
+				timeUnixNano: now,
+				count: `${actionState.count || 0}`,
+				sum: actionState.duration_sum || 0,
+				bucketCounts,
+				explicitBounds: DURATION_BOUNDS
+			} ]
+		}
+	});
+}
+
+push(metrics, gauge('system.uptime', 'Router uptime', 's', uptime, now));
+push(metrics, gauge('system.memory.utilization', 'Router memory utilization', '1',
+	memoryUtilization(), now));
+push(metrics, gauge('system.filesystem.utilization', 'Overlay filesystem utilization', '1',
+	overlayUtilization(), now, [ attribute('system.filesystem.mountpoint', '/overlay') ]));
+push(metrics, gauge('system.cpu.load_average.1m', 'One minute load average', '1', load, now));
+
+print(sprintf('%J', {
+	resourceMetrics: [ {
+		resource: {
+			attributes: [
+				attribute('service.name', 'familycontrol'),
+				attribute('service.namespace', 'hajma'),
+				attribute('service.version', '0.1.0'),
+				attribute('deployment.environment.name', 'home')
+			]
+		},
+		scopeMetrics: [ {
+			scope: {
+				name: 'cz.hajma.familycontrol',
+				version: '0.1.0'
+			},
+			metrics
+		} ]
+	} ]
+}));

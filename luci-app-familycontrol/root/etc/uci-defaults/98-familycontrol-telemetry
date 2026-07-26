@@ -1,0 +1,7 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+chmod 0600 /etc/config/familycontrol_telemetry
+/etc/init.d/familycontrol-telemetry enable
+
+exit 0

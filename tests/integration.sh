@@ -46,11 +46,21 @@ docker run --rm --platform linux/amd64 --cap-add NET_ADMIN \
 		test "$(uci get familycontrol.alice.paused)" = 1
 		test "$(uci get firewall.familycontrol_alice.family)" = any
 		test "$(uci get firewall.familycontrol_alice.target)" = REJECT
-		test "$(uci get firewall.familycontrol_alice.src_mac)" = \
-			"00:11:22:33:44:55 AA:BB:CC:DD:EE:FF"
-		fw4 check
+			test "$(uci get firewall.familycontrol_alice.src_mac)" = \
+				"00:11:22:33:44:55 AA:BB:CC:DD:EE:FF"
+			fw4 check
 
-		ubus call familycontrol set_paused \
+			telemetry="$(ucode \
+				/src/luci-app-familycontrol/root/usr/libexec/familycontrol-otel-payload)"
+			echo "$telemetry" | jsonfilter \
+				-e "@.resourceMetrics[0].resource.attributes[0].value.stringValue" |
+				grep -qx familycontrol
+			echo "$telemetry" |
+				grep -Eq "\"name\":[[:space:]]*\"familycontrol.enforcement.drift\""
+			echo "$telemetry" |
+				grep -Eq "\"name\":[[:space:]]*\"familycontrol.action.duration\""
+
+			ubus call familycontrol set_paused \
 			"{\"person\":\"alice\",\"paused\":false}" >/dev/null
 
 		test "$(uci get familycontrol.alice.paused)" = 0
