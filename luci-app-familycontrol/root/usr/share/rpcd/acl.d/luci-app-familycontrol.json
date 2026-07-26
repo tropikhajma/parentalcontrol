@@ -3,16 +3,17 @@
 		"description": "Manage family internet access",
 		"read": {
 			"ubus": {
-				"familycontrol": [ "status" ]
+				"familycontrol": [ "status" ],
+				"uci": [ "get" ]
 			},
 			"uci": [ "familycontrol" ]
 		},
 		"write": {
 			"ubus": {
-				"familycontrol": [ "set_paused" ]
+				"familycontrol": [ "set_paused" ],
+				"uci": [ "add", "set", "delete", "commit" ]
 			},
 			"uci": [ "familycontrol" ]
 		}
 	}
 }
-
