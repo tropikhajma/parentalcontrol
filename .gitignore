@@ -5,3 +5,4 @@ build_dir/
 dl/
 staging_dir/
 tmp/
+node_modules/
