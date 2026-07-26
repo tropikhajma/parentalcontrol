@@ -46,10 +46,14 @@ trap 'rm -rf "$work_dir"' EXIT INT TERM
 
 /usr/libexec/familycontrol-otel-payload >"$payload" || exit 1
 
+basic_auth="$(
+	printf '%s:%s' "$instance_id" "$api_token" |
+		ucode -e 'const fs = require("fs"); print(b64enc(fs.readfile("/dev/stdin")));'
+)" || exit 1
 {
-	printf 'user=%s\n' "$instance_id"
-	printf 'password=%s\n' "$api_token"
+	printf 'header=Authorization: Basic %s\n' "$basic_auth"
 } >"$wget_config"
+unset basic_auth
 chmod 0600 "$wget_config"
 
 case "$endpoint" in

@@ -2,7 +2,7 @@
 
 Date: 2026-07-26
 
-Scope: Family Control `0.1.0-r12`, the live OpenWrt 25.12.4 deployment, its
+Scope: Family Control `0.1.0-r13`, the live OpenWrt 25.12.4 deployment, its
 standalone web interface, rpcd/ucode backend, UCI and firewall4 integration,
 Endora DNS, Let's Encrypt/ACME-DNS certificate automation, and the planned
 Tailscale connection.
