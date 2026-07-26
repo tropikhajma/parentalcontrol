@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-repo_dir="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
+repo_dir="$(CDPATH='' cd -- "$(dirname -- "$0")/.." && pwd)"
 
 node --check \
 	"$repo_dir/luci-app-familycontrol/htdocs/luci-static/resources/view/familycontrol/overview.js"

@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-repo_dir="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
+repo_dir="$(CDPATH='' cd -- "$(dirname -- "$0")/.." && pwd)"
 
 docker run --rm --platform linux/amd64 --cap-add NET_ADMIN \
 	-v "$repo_dir:/src:ro" \
