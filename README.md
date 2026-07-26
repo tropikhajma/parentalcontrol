@@ -39,18 +39,18 @@ OpenWrt container.
 The package built for OpenWrt 25.12.4 is:
 
 ```text
-dist/luci-app-familycontrol-0.1.0-r6.apk
-SHA-256: a994c09dd2a0cd0a366c9103bc0046174fb0959201652a0a08e06106dd08a019
+dist/luci-app-familycontrol-0.1.0-r7.apk
+SHA-256: 96a6d83d3adc60393837d0161930265b28bbf77322c211808728f75f4b39ba1e
 ```
 
 Copy it to the router, install it, and restart rpcd:
 
 ```sh
 ssh root@openwrt \
-  'cat > /tmp/luci-app-familycontrol-0.1.0-r6.apk' \
-  < dist/luci-app-familycontrol-0.1.0-r6.apk
+  'cat > /tmp/luci-app-familycontrol-0.1.0-r7.apk' \
+  < dist/luci-app-familycontrol-0.1.0-r7.apk
 ssh root@openwrt
-apk add --allow-untrusted /tmp/luci-app-familycontrol-0.1.0-r6.apk
+apk add --allow-untrusted /tmp/luci-app-familycontrol-0.1.0-r7.apk
 /etc/init.d/rpcd restart
 ```
 
@@ -82,7 +82,7 @@ and devices first, then use the Overview page for pause/resume.
 
 ## Standalone family interface
 
-Release `r6` also provides a mobile standalone interface at:
+Release `r7` also provides a mobile standalone interface at:
 
 ```text
 http://family.hajma.cz/family/
@@ -95,6 +95,10 @@ after installation:
 ```sh
 passwd familycontrol
 ```
+
+When adding a device, the interface offers current DHCP clients by hostname,
+IP address, and MAC address. Manual MAC entry remains available for offline or
+statically configured devices.
 
 For LAN name resolution, configure dnsmasq to answer locally and not forward
 IPv6 queries to public DNS:

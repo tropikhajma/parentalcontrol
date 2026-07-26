@@ -5,6 +5,7 @@ const MAC_PATTERN = /^[0-9A-F]{2}(:[0-9A-F]{2}){5}$/;
 let session = sessionStorage.getItem('familycontrol-session');
 let requestId = 0;
 let config = {};
+let candidates = [];
 
 const $ = id => document.getElementById(id);
 
@@ -45,10 +46,12 @@ function escapeHtml(value) {
 }
 
 async function load() {
-	const [status, uci] = await Promise.all([
+	const [status, discovered, uci] = await Promise.all([
 		rpc('familycontrol', 'status'),
+		rpc('familycontrol', 'devices'),
 		rpc('uci', 'get', { config: 'familycontrol' })
 	]);
+	candidates = discovered.devices || [];
 	config = uci.values || {};
 	render(status.people || []);
 }
@@ -140,7 +143,8 @@ $('person-form').addEventListener('submit', async event => {
 
 $('device-form').addEventListener('submit', async event => {
 	event.preventDefault();
-	const mac = $('device-mac').value.trim().toUpperCase();
+	const choice = $('device-choice').value;
+	const mac = (choice === 'manual' ? $('device-mac').value : choice).trim().toUpperCase();
 	if (!MAC_PATTERN.test(mac)) {
 		showError('Enter a valid MAC address.');
 		return;
@@ -154,6 +158,44 @@ $('device-form').addEventListener('submit', async event => {
 		await saveAndReload(id ? 'set' : 'add', args);
 		$('device-dialog').close();
 	} catch (error) { showError(error.message); }
+});
+
+function populateDeviceChoices(currentMac = '') {
+	const select = $('device-choice');
+	const normalizedCurrent = currentMac.toUpperCase();
+	const available = candidates.filter(device =>
+		!device.assigned_person || device.mac === normalizedCurrent);
+
+	select.innerHTML = [
+		'<option value="">Choose a connected device…</option>',
+		...available.map(device => {
+			const label = [
+				device.hostname || 'Unknown device',
+				device.ip,
+				device.mac
+			].filter(Boolean).join(' · ');
+			return `<option value="${escapeHtml(device.mac)}">${escapeHtml(label)}</option>`;
+		}),
+		'<option value="manual">Enter a MAC address manually…</option>'
+	].join('');
+
+	if (normalizedCurrent && !available.some(device => device.mac === normalizedCurrent)) {
+		select.insertAdjacentHTML('beforeend',
+			`<option value="${escapeHtml(normalizedCurrent)}">${escapeHtml(normalizedCurrent)} · saved device</option>`);
+	}
+
+	select.value = normalizedCurrent || '';
+	$('manual-mac-fields').classList.add('hidden');
+}
+
+$('device-choice').addEventListener('change', () => {
+	const selected = candidates.find(device => device.mac === $('device-choice').value);
+	const manual = $('device-choice').value === 'manual';
+	$('manual-mac-fields').classList.toggle('hidden', !manual);
+	$('device-mac').required = manual;
+
+	if (selected && !$('device-name').value)
+		$('device-name').value = selected.hostname || selected.ip || '';
 });
 
 $('people').addEventListener('click', async event => {
@@ -174,6 +216,7 @@ $('people').addEventListener('click', async event => {
 			$('device-person').value = id;
 			$('device-name').value = '';
 			$('device-mac').value = '';
+			populateDeviceChoices();
 			$('device-dialog').showModal();
 		}
 		else if (action === 'edit-device') {
@@ -183,6 +226,7 @@ $('people').addEventListener('click', async event => {
 			$('device-person').value = device.person;
 			$('device-name').value = device.name || '';
 			$('device-mac').value = device.mac || '';
+			populateDeviceChoices(device.mac || '');
 			$('device-dialog').showModal();
 		}
 		else if (action === 'edit-person') {

@@ -1,5 +1,6 @@
 'use strict';
 
+import { readfile } from 'fs';
 import { cursor } from 'uci';
 
 const FIREWALL_PREFIX = 'familycontrol_';
@@ -113,6 +114,42 @@ function status() {
 	};
 }
 
+function connectedDevices() {
+	const ctx = cursor();
+	const leases = readfile('/tmp/dhcp.leases') || '';
+	let devices = [];
+
+	for (let line in split(trim(leases), '\n')) {
+		let fields = split(line, /[ \t]+/);
+
+		if (length(fields) < 4)
+			continue;
+
+		let mac = normalizeMac(fields[1]);
+
+		if (!match(mac, MAC_PATTERN))
+			continue;
+
+		let assignedPerson = null;
+		ctx.foreach('familycontrol', 'device', section => {
+			if (normalizeMac(section.mac) == mac)
+				assignedPerson = section.person || null;
+		});
+
+		push(devices, {
+			mac,
+			ip: fields[2],
+			hostname: fields[3] == '*' ? '' : fields[3],
+			assigned_person: assignedPerson
+		});
+	}
+
+	return {
+		ok: true,
+		devices
+	};
+}
+
 function setPaused(request) {
 	const personId = request.args.person;
 	const paused = request.args.paused;
@@ -152,6 +189,9 @@ return {
 	familycontrol: {
 		status: {
 			call: status
+		},
+		devices: {
+			call: connectedDevices
 		},
 		set_paused: {
 			args: {

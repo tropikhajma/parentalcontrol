@@ -81,8 +81,12 @@
 		<input id="device-person" type="hidden">
 		<label for="device-name">Device name</label>
 		<input id="device-name" maxlength="40" required>
-		<label for="device-mac">MAC address</label>
-		<input id="device-mac" inputmode="text" placeholder="AA:BB:CC:DD:EE:FF" required>
+		<label for="device-choice">Connected device</label>
+		<select id="device-choice" required></select>
+		<div id="manual-mac-fields" class="hidden">
+			<label for="device-mac">MAC address</label>
+			<input id="device-mac" inputmode="text" placeholder="AA:BB:CC:DD:EE:FF">
+		</div>
 		<div class="actions">
 			<button type="submit">Save</button>
 			<button type="button" class="secondary cancel">Cancel</button>

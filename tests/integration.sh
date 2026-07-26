@@ -12,6 +12,10 @@ docker run --rm --platform linux/amd64 --cap-add NET_ADMIN \
 		cp /src/tests/fixtures/firewall /etc/init.d/firewall
 		cp /src/luci-app-familycontrol/root/usr/share/rpcd/ucode/familycontrol \
 			/usr/share/rpcd/ucode/familycontrol
+		printf "%s\n" \
+			"2000000000 00:11:22:33:44:55 192.168.1.20 alice-laptop *" \
+			"2000000000 DE:AD:BE:EF:00:01 192.168.1.21 new-phone *" \
+			> /tmp/dhcp.leases
 
 		apk update >/dev/null
 		apk add rpcd-mod-ucode >/dev/null
@@ -25,6 +29,14 @@ docker run --rm --platform linux/amd64 --cap-add NET_ADMIN \
 		echo "$status" | jsonfilter -e "@.people[0].id" | grep -qx alice
 		echo "$status" | jsonfilter -e "@.people[0].devices[1].mac" |
 			grep -qx "AA:BB:CC:DD:EE:FF"
+
+		devices="$(ubus call familycontrol devices)"
+		echo "$devices" | jsonfilter -e "@.devices[0].hostname" |
+			grep -qx alice-laptop
+		echo "$devices" | jsonfilter -e "@.devices[0].assigned_person" |
+			grep -qx alice
+		echo "$devices" | jsonfilter -e "@.devices[1].mac" |
+			grep -qx "DE:AD:BE:EF:00:01"
 
 		ubus call familycontrol set_paused \
 			"{\"person\":\"alice\",\"paused\":true}" >/dev/null

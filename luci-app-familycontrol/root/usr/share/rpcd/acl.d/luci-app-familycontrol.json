@@ -3,7 +3,7 @@
 		"description": "Manage family internet access",
 		"read": {
 			"ubus": {
-				"familycontrol": [ "status" ],
+				"familycontrol": [ "status", "devices" ],
 				"uci": [ "get" ]
 			},
 			"uci": [ "familycontrol" ]
