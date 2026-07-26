@@ -54,7 +54,7 @@ in the reports without making the command fail.
 Override the defaults when needed:
 
 ```sh
-ZAP_TARGET=http://family.hajma.cz/family/ \
+ZAP_TARGET=https://family.hajma.cz/family/ \
 ZAP_TARGET_IP=192.168.1.1 \
 npm run test:zap
 ```
@@ -114,7 +114,7 @@ and devices first, then use the Overview page for pause/resume.
 Release `r9` also provides a mobile standalone interface at:
 
 ```text
-http://family.hajma.cz/family/
+https://family.hajma.cz/family/
 ```
 
 It uses the separate `familycontrol` account, whose rpcd access is limited to
@@ -139,9 +139,11 @@ uci commit dhcp
 /etc/init.d/dnsmasq restart
 ```
 
-HTTP credentials are not protected from devices able to observe LAN traffic.
-Keep the interface limited to trusted LAN and Tailscale networks until HTTPS is
-enabled. Do not expose uhttpd through the WAN firewall.
+The router uses a Let's Encrypt certificate obtained with automated DNS-01
+validation. The service remains limited to LAN and, eventually, Tailscale:
+uhttpd is not exposed through the WAN firewall. See
+[docs/https.md](docs/https.md) for DNS, certificate renewal, recovery, and
+secret-handling details.
 
 Do not publish LuCI on the WAN. Connect to its Tailscale address to manage it
 remotely.

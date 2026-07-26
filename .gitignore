@@ -8,3 +8,6 @@ tmp/
 node_modules/
 reports/zap/
 zap.yaml
+*.key
+*acmedns-registration*.json
+.env

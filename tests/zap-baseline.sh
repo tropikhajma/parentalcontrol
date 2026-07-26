@@ -4,7 +4,7 @@
 set -eu
 
 repo_dir="$(CDPATH='' cd -- "$(dirname -- "$0")/.." && pwd)"
-target="${ZAP_TARGET:-http://family.hajma.cz/family/}"
+target="${ZAP_TARGET:-https://family.hajma.cz/family/}"
 target_ip="${ZAP_TARGET_IP:-192.168.1.1}"
 image="${ZAP_IMAGE:-ghcr.io/zaproxy/zaproxy:stable}"
 report_dir="$repo_dir/reports/zap"
