@@ -9,7 +9,9 @@ The first release will let an administrator:
 - pause or resume internet access for all of the person's devices; and
 - use the same LuCI interface remotely over Tailscale.
 
-See [docs/design.md](docs/design.md) for the initial architecture and scope.
+See [docs/design.md](docs/design.md) for the initial architecture and scope,
+and [docs/architecture-risk-analysis.md](docs/architecture-risk-analysis.md)
+for the current threat model and prioritized risk register.
 
 ## Development target
 
