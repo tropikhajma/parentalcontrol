@@ -6,3 +6,5 @@ dl/
 staging_dir/
 tmp/
 node_modules/
+reports/zap/
+zap.yaml

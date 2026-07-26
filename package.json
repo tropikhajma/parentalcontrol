@@ -3,7 +3,8 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"lint": "eslint ."
+		"lint": "eslint .",
+		"test:zap": "./tests/zap-baseline.sh"
 	},
 	"devDependencies": {
 		"@eslint/js": "10.0.1",

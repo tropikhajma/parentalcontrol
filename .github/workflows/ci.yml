@@ -36,7 +36,7 @@ jobs:
           sudo apt-get install --yes shellcheck
 
       - name: Lint shell scripts
-        run: shellcheck tests/check.sh tests/integration.sh
+        run: shellcheck tests/check.sh tests/integration.sh tests/zap-baseline.sh
 
       - name: Run OpenWrt checks
         run: ./tests/check.sh

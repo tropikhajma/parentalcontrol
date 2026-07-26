@@ -34,6 +34,35 @@ They validate JavaScript and JSON syntax, compile the rpcd ucode plugin, and run
 pause/resume through real ubus, rpcd, UCI, and firewall4 components in an
 OpenWrt container.
 
+## Local security scan
+
+Run an OWASP ZAP passive baseline scan from a laptop that can reach the router:
+
+```sh
+npm run test:zap
+```
+
+The command runs ZAP in Docker, maps `family.hajma.cz` to `192.168.1.1` inside
+the container, and writes HTML, JSON, and Markdown reports under
+`reports/zap/`. Reports are ignored by Git because they can contain details
+about the local network.
+
+The scan is deliberately not run by GitHub Actions: the target is LAN-only.
+It is passive and does not perform ZAP's active attacks. Warnings are included
+in the reports without making the command fail.
+
+Override the defaults when needed:
+
+```sh
+ZAP_TARGET=http://family.hajma.cz/family/ \
+ZAP_TARGET_IP=192.168.1.1 \
+npm run test:zap
+```
+
+The baseline scan is unauthenticated, so it covers the login page and other
+publicly reachable resources. Do not put the Family Control password in this
+script or commit it to the repository.
+
 ## Installing a development build
 
 The package built for OpenWrt 25.12.4 is:
