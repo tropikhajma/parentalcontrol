@@ -63,7 +63,7 @@
       },
       "targets": [
         {
-          "expr": "familycontrol_enforcement_drift",
+          "expr": "familycontrol_enforcement_drift_ratio",
           "refId": "A"
         }
       ],
@@ -306,7 +306,7 @@
       },
       "targets": [
         {
-          "expr": "increase(familycontrol_action_count_total[$__rate_interval])",
+          "expr": "sum by (familycontrol_action, familycontrol_result) (increase(familycontrol_action_count_total[$__rate_interval])) or vector(0)",
           "legendFormat": "{{familycontrol_action}} {{familycontrol_result}}",
           "refId": "A"
         }

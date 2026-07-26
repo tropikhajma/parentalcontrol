@@ -122,9 +122,13 @@ unit is `1`. For example, `system.memory.utilization` is stored as
 `system_memory_utilization_ratio`. If a panel is empty, use Explore to confirm
 the translated name and adjust the query.
 
+Action counter series are created only after the first pause or resume attempt
+since router boot. The supplied dashboard displays zero until a labelled action
+series exists.
+
 Recommended alerts:
 
-- `familycontrol_enforcement_drift == 1` for two export intervals;
+- `familycontrol_enforcement_drift_ratio == 1` for two export intervals;
 - telemetry last-success age greater than five minutes;
 - any increase in firewall reload failures;
 - memory utilization above 90% for ten minutes;
