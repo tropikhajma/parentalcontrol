@@ -1,0 +1,19 @@
+config settings 'main'
+	option enabled '1'
+	option src_zone 'lan'
+	option dest_zone 'wan'
+
+config person 'alice'
+	option name 'Alice'
+	option paused '0'
+
+config device 'alice_phone'
+	option name 'Alice phone'
+	option mac '00:11:22:33:44:55'
+	option person 'alice'
+
+config device 'alice_laptop'
+	option name 'Alice laptop'
+	option mac 'AA:BB:CC:DD:EE:FF'
+	option person 'alice'
+

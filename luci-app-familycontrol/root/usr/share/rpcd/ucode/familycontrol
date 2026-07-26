@@ -1,0 +1,164 @@
+'use strict';
+
+import { cursor } from 'uci';
+
+const FIREWALL_PREFIX = 'familycontrol_';
+const PERSON_ID_PATTERN = /^[A-Za-z0-9_]+$/;
+const MAC_PATTERN = /^[0-9A-F]{2}(:[0-9A-F]{2}){5}$/;
+
+function fail(code, message) {
+	return {
+		ok: false,
+		code,
+		message
+	};
+}
+
+function normalizeMac(value) {
+	return uc(value || '');
+}
+
+function findPerson(ctx, personId) {
+	let person = null;
+
+	ctx.foreach('familycontrol', 'person', section => {
+		if (section['.name'] == personId)
+			person = section;
+	});
+
+	return person;
+}
+
+function personDevices(ctx, personId) {
+	let devices = [];
+
+	ctx.foreach('familycontrol', 'device', section => {
+		if (section.person == personId) {
+			let mac = normalizeMac(section.mac);
+
+			if (match(mac, MAC_PATTERN))
+				push(devices, {
+					id: section['.name'],
+					name: section.name || mac,
+					mac
+				});
+		}
+	});
+
+	return devices;
+}
+
+function firewallSection(personId) {
+	return FIREWALL_PREFIX + personId;
+}
+
+function applyFirewallRule(ctx, personId, devices, paused, settings) {
+	const section = firewallSection(personId);
+	const previous = ctx.get_all('firewall', section);
+
+	if (!paused) {
+		if (ctx.get('firewall', section))
+			ctx.delete('firewall', section);
+	}
+	else {
+		ctx.set('firewall', section, 'rule');
+		ctx.set('firewall', section, 'name', 'Family Control: ' + personId);
+		ctx.set('firewall', section, 'src', settings.src_zone || 'lan');
+		ctx.set('firewall', section, 'dest', settings.dest_zone || 'wan');
+		ctx.set('firewall', section, 'proto', 'all');
+		ctx.set('firewall', section, 'family', 'any');
+		ctx.set('firewall', section, 'target', 'REJECT');
+		ctx.set('firewall', section, 'enabled', '1');
+		ctx.set('firewall', section, 'src_mac', map(devices, device => device.mac));
+	}
+
+	ctx.commit('firewall');
+	let exitCode = system('/etc/init.d/firewall reload >/dev/null 2>&1');
+
+	if (exitCode != 0) {
+		if (ctx.get('firewall', section))
+			ctx.delete('firewall', section);
+
+		if (previous) {
+			ctx.set('firewall', section, previous['.type']);
+
+			for (let option, value in previous)
+				if (substr(option, 0, 1) != '.')
+					ctx.set('firewall', section, option, value);
+		}
+
+		ctx.commit('firewall');
+		system('/etc/init.d/firewall reload >/dev/null 2>&1');
+	}
+
+	return exitCode;
+}
+
+function status() {
+	const ctx = cursor();
+	let people = [];
+
+	ctx.foreach('familycontrol', 'person', section => {
+		push(people, {
+			id: section['.name'],
+			name: section.name || section['.name'],
+			paused: section.paused == '1',
+			devices: personDevices(ctx, section['.name'])
+		});
+	});
+
+	return {
+		ok: true,
+		people
+	};
+}
+
+function setPaused(request) {
+	const personId = request.args.person;
+	const paused = request.args.paused;
+	const ctx = cursor();
+
+	if (!match(personId, PERSON_ID_PATTERN))
+		return fail('invalid_person', 'Invalid person identifier');
+
+	const person = findPerson(ctx, personId);
+
+	if (!person)
+		return fail('person_not_found', 'Person does not exist');
+
+	const devices = personDevices(ctx, personId);
+
+	if (paused && !length(devices))
+		return fail('no_devices', 'Assign at least one valid device before pausing');
+
+	const settings = ctx.get_all('familycontrol', 'main') || {};
+	const exitCode = applyFirewallRule(ctx, personId, devices, paused, settings);
+
+	if (exitCode != 0)
+		return fail('firewall_reload_failed', 'Firewall rejected the generated rule');
+
+	ctx.set('familycontrol', personId, 'paused', paused ? '1' : '0');
+	ctx.commit('familycontrol');
+
+	return {
+		ok: true,
+		person: personId,
+		paused,
+		device_count: length(devices)
+	};
+}
+
+return {
+	familycontrol: {
+		status: {
+			call: status
+		},
+		set_paused: {
+			args: {
+				person: '',
+				paused: false
+			},
+			call: setPaused
+		}
+	}
+};

@@ -1,0 +1,18 @@
+{
+	"luci-app-familycontrol": {
+		"description": "Manage family internet access",
+		"read": {
+			"ubus": {
+				"familycontrol": [ "status" ]
+			},
+			"uci": [ "familycontrol" ]
+		},
+		"write": {
+			"ubus": {
+				"familycontrol": [ "set_paused" ]
+			},
+			"uci": [ "familycontrol" ]
+		}
+	}
+}
+
