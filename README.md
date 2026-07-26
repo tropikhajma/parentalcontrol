@@ -36,20 +36,42 @@ OpenWrt container.
 
 ## Installing a development build
 
-Add `luci-app-familycontrol` to the `applications` directory of an OpenWrt LuCI
-checkout or expose this repository as a custom feed, then build it with the
-OpenWrt 25.12 SDK:
+The package built for OpenWrt 25.12.4 is:
 
-```sh
-./scripts/feeds update luci
-./scripts/feeds install luci-app-familycontrol
-make package/luci-app-familycontrol/compile V=s
+```text
+dist/luci-app-familycontrol-0.1.0-r1.apk
+SHA-256: aaf2f808fdfd01b6835040d3a53b643dc21805767ee430f4258acd5a0df4550d
 ```
 
-Install the resulting `.apk` on the router and restart rpcd:
+Copy it to the router, install it, and restart rpcd:
 
 ```sh
-apk add --allow-untrusted /tmp/luci-app-familycontrol-*.apk
+scp dist/luci-app-familycontrol-0.1.0-r1.apk root@openwrt:/tmp/
+ssh root@openwrt
+apk add --allow-untrusted /tmp/luci-app-familycontrol-0.1.0-r1.apk
+/etc/init.d/rpcd restart
+```
+
+The package is unsigned because it is a local development build. Verify its
+checksum before copying it if it is transferred through an untrusted system.
+
+To build it from source with the OpenWrt 25.12 SDK, expose
+`luci-app-familycontrol/` as an SDK package and use:
+
+```sh
+make defconfig
+make NO_DEPS=1 package/luci-app-familycontrol/compile V=s
+```
+
+`NO_DEPS=1` is appropriate for this architecture-independent package: its
+firewall4, LuCI, rpcd, and ucode dependencies are runtime dependencies already
+provided by the router. It also prevents the release SDK's buildbot
+configuration from repackaging every selected kernel module.
+
+To uninstall the application:
+
+```sh
+apk del luci-app-familycontrol
 /etc/init.d/rpcd restart
 ```
 
