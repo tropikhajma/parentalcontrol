@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 'use strict';
 'require form';
 'require uci';
@@ -46,4 +48,3 @@ return view.extend({
 		return map.render();
 	}
 });
-

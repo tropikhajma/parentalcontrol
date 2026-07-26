@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 config settings 'main'
 	option enabled '1'
 	option src_zone 'lan'
@@ -16,4 +18,3 @@ config device 'alice_laptop'
 	option name 'Alice laptop'
 	option mac 'AA:BB:CC:DD:EE:FF'
 	option person 'alice'
-

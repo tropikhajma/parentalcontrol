@@ -1,4 +1,5 @@
 #!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 if ! grep -q '^familycontrol:' /etc/passwd; then
 	useradd --system --no-create-home --shell /bin/false familycontrol

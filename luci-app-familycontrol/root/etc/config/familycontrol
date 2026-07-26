@@ -1,5 +1,6 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 config settings 'main'
 	option enabled '1'
 	option src_zone 'lan'
 	option dest_zone 'wan'
-

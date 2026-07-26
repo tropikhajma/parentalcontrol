@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 'use strict';
 
 const ZERO_SESSION = '00000000000000000000000000000000';

@@ -145,3 +145,8 @@ enabled. Do not expose uhttpd through the WAN firewall.
 
 Do not publish LuCI on the WAN. Connect to its Tailscale address to manage it
 remotely.
+
+## License
+
+Family Control is free software licensed under the
+[GNU General Public License, version 3 or later](LICENSE).
