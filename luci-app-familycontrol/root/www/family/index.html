@@ -96,6 +96,10 @@
 		</div>
 	</form>
 </dialog>
-<script src="app.js?v=8"></script>
+<script>
+	const appScript = document.createElement('script');
+	appScript.src = `app.js?${Date.now()}`;
+	document.body.append(appScript);
+</script>
 </body>
 </html>
