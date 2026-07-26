@@ -1,9 +1,8 @@
 #!/bin/sh
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-set -u
-
 # shellcheck source=/dev/null
+IPKG_INSTROOT="${IPKG_INSTROOT:-}"
 . /lib/functions.sh
 
 while true; do

@@ -1,9 +1,8 @@
 #!/bin/sh
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-set -u
-
 # shellcheck source=/dev/null
+IPKG_INSTROOT="${IPKG_INSTROOT:-}"
 . /lib/functions.sh
 
 config_load familycontrol_telemetry
@@ -11,6 +10,10 @@ config_get_bool enabled main enabled 0
 config_get endpoint main endpoint
 config_get instance_id main instance_id
 config_get api_token main api_token
+if [ -z "$api_token" ]; then
+	# Accept the early development key name so upgrades do not silently stop.
+	config_get api_token main token
+fi
 
 [ "$enabled" -eq 1 ] || exit 0
 
