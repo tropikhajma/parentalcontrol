@@ -7,7 +7,7 @@ LUCI_DEPENDS:=+luci-base +firewall4 +rpcd-mod-ucode +ucode-mod-uci +shadow-usera
 LUCI_PKGARCH:=all
 
 PKG_VERSION:=0.1.0
-PKG_RELEASE:=7
+PKG_RELEASE:=8
 PKG_LICENSE:=Apache-2.0
 
 include $(TOPDIR)/feeds/luci/luci.mk

@@ -39,18 +39,18 @@ OpenWrt container.
 The package built for OpenWrt 25.12.4 is:
 
 ```text
-dist/luci-app-familycontrol-0.1.0-r7.apk
-SHA-256: 96a6d83d3adc60393837d0161930265b28bbf77322c211808728f75f4b39ba1e
+dist/luci-app-familycontrol-0.1.0-r8.apk
+SHA-256: 099af184c7e874aeca1371a4127e1aec68c0a42d332da13d5c73b59dae0eb292
 ```
 
 Copy it to the router, install it, and restart rpcd:
 
 ```sh
 ssh root@openwrt \
-  'cat > /tmp/luci-app-familycontrol-0.1.0-r7.apk' \
-  < dist/luci-app-familycontrol-0.1.0-r7.apk
+  'cat > /tmp/luci-app-familycontrol-0.1.0-r8.apk' \
+  < dist/luci-app-familycontrol-0.1.0-r8.apk
 ssh root@openwrt
-apk add --allow-untrusted /tmp/luci-app-familycontrol-0.1.0-r7.apk
+apk add --allow-untrusted /tmp/luci-app-familycontrol-0.1.0-r8.apk
 /etc/init.d/rpcd restart
 ```
 
@@ -82,7 +82,7 @@ and devices first, then use the Overview page for pause/resume.
 
 ## Standalone family interface
 
-Release `r7` also provides a mobile standalone interface at:
+Release `r8` also provides a mobile standalone interface at:
 
 ```text
 http://family.hajma.cz/family/
