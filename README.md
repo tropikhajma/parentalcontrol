@@ -39,16 +39,18 @@ OpenWrt container.
 The package built for OpenWrt 25.12.4 is:
 
 ```text
-dist/luci-app-familycontrol-0.1.0-r1.apk
-SHA-256: aaf2f808fdfd01b6835040d3a53b643dc21805767ee430f4258acd5a0df4550d
+dist/luci-app-familycontrol-0.1.0-r2.apk
+SHA-256: 52a58789bad8277bc5e3e66a5a52695237f0b6d4fb11816df5b597afa647f5f8
 ```
 
 Copy it to the router, install it, and restart rpcd:
 
 ```sh
-scp dist/luci-app-familycontrol-0.1.0-r1.apk root@openwrt:/tmp/
+ssh root@openwrt \
+  'cat > /tmp/luci-app-familycontrol-0.1.0-r2.apk' \
+  < dist/luci-app-familycontrol-0.1.0-r2.apk
 ssh root@openwrt
-apk add --allow-untrusted /tmp/luci-app-familycontrol-0.1.0-r1.apk
+apk add --allow-untrusted /tmp/luci-app-familycontrol-0.1.0-r2.apk
 /etc/init.d/rpcd restart
 ```
 

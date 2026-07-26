@@ -77,7 +77,7 @@ function personCard(view, person) {
 			'class': person.paused
 				? 'btn cbi-button-positive fc-action'
 				: 'btn cbi-button-negative fc-action',
-			'disabled': count === 0,
+			'disabled': count === 0 ? true : null,
 			'click': ui.createHandlerFn(view, () => view.setPaused(person, !person.paused))
 		}, person.paused ? _('Resume') : _('Pause'))
 	]);
