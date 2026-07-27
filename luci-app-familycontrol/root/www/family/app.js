@@ -48,13 +48,28 @@ function escapeHtml(value) {
 }
 
 async function load() {
-	const [status, discovered, uci] = await Promise.all([
+	const [status, discovered] = await Promise.all([
 		rpc('familycontrol', 'status'),
-		rpc('familycontrol', 'devices'),
-		rpc('uci', 'get', { config: 'familycontrol' })
+		rpc('familycontrol', 'devices')
 	]);
 	candidates = discovered.devices || [];
-	config = uci.values || {};
+	config = {};
+	for (const person of status.people || []) {
+		config[person.id] = {
+			'.name': person.id,
+			'.type': 'person',
+			name: person.name,
+			paused: person.paused ? '1' : '0'
+		};
+		for (const device of person.devices || [])
+			config[device.id] = {
+				'.name': device.id,
+				'.type': 'device',
+				name: device.name,
+				mac: device.mac,
+				person: person.id
+			};
+	}
 	render(status.people || []);
 }
 
@@ -89,9 +104,8 @@ function render(people) {
 	}).join('') : '<div class="card empty">No people yet. Add someone to get started.</div>';
 }
 
-async function saveAndReload(method, args) {
-	await rpc('uci', method, args);
-	await rpc('uci', 'commit', { config: 'familycontrol' });
+async function mutateAndReload(method, args) {
+	await rpc('familycontrol', method, args);
 	await load();
 }
 
@@ -134,11 +148,11 @@ document.querySelectorAll('.cancel').forEach(button =>
 $('person-form').addEventListener('submit', async event => {
 	event.preventDefault();
 	const id = $('person-id').value;
-	const args = id
-		? { config: 'familycontrol', section: id, values: { name: $('person-name').value } }
-		: { config: 'familycontrol', type: 'person', values: { name: $('person-name').value, paused: '0' } };
 	try {
-		await saveAndReload(id ? 'set' : 'add', args);
+		await mutateAndReload('save_person', {
+			person: id,
+			name: $('person-name').value
+		});
 		$('person-dialog').close();
 	} catch (error) { showError(error.message); }
 });
@@ -152,12 +166,13 @@ $('device-form').addEventListener('submit', async event => {
 		return;
 	}
 	const id = $('device-id').value;
-	const values = { name: $('device-name').value, mac, person: $('device-person').value };
-	const args = id
-		? { config: 'familycontrol', section: id, values }
-		: { config: 'familycontrol', type: 'device', values };
 	try {
-		await saveAndReload(id ? 'set' : 'add', args);
+		await mutateAndReload('save_device', {
+			device: id,
+			name: $('device-name').value,
+			mac,
+			person: $('device-person').value
+		});
 		$('device-dialog').close();
 	} catch (error) { showError(error.message); }
 });
@@ -238,15 +253,9 @@ $('people').addEventListener('click', async event => {
 			$('person-dialog').showModal();
 		}
 		else if (action === 'delete-device' && confirm('Remove this device?'))
-			await saveAndReload('delete', { config: 'familycontrol', section: id });
-		else if (action === 'delete-person' && confirm('Delete this person and their devices?')) {
-			if (config[id].paused === '1')
-				await rpc('familycontrol', 'set_paused', { person: id, paused: false });
-			for (const device of Object.values(config))
-				if (device['.type'] === 'device' && device.person === id)
-					await rpc('uci', 'delete', { config: 'familycontrol', section: device['.name'] });
-			await saveAndReload('delete', { config: 'familycontrol', section: id });
-		}
+			await mutateAndReload('delete_device', { device: id });
+		else if (action === 'delete-person' && confirm('Delete this person and their devices?'))
+			await mutateAndReload('delete_person', { person: id });
 	}
 	catch (error) { showError(error.message); }
 });

@@ -8,8 +8,6 @@ repo_dir="$(CDPATH='' cd -- "$(dirname -- "$0")/.." && pwd)"
 node --check \
 	"$repo_dir/luci-app-familycontrol/htdocs/luci-static/resources/view/familycontrol/overview.js"
 node --check \
-	"$repo_dir/luci-app-familycontrol/htdocs/luci-static/resources/view/familycontrol/manage.js"
-node --check \
 	"$repo_dir/luci-app-familycontrol/root/www/family/app.js"
 
 sh -n \
@@ -22,6 +20,21 @@ sh -n \
 jq empty \
 	"$repo_dir/luci-app-familycontrol/root/usr/share/luci/menu.d/luci-app-familycontrol.json" \
 	"$repo_dir/luci-app-familycontrol/root/usr/share/rpcd/acl.d/luci-app-familycontrol.json"
+
+jq -e '
+	.["luci-app-familycontrol"].write.ubus.familycontrol
+		| index("save_device") != null and
+		  index("delete_device") != null and
+		  index("save_person") != null and
+		  index("delete_person") != null
+' "$repo_dir/luci-app-familycontrol/root/usr/share/rpcd/acl.d/luci-app-familycontrol.json" \
+	>/dev/null
+
+jq -e '
+	.["luci-app-familycontrol"].write.ubus.uci == null and
+	.["luci-app-familycontrol"].write.uci == null
+' "$repo_dir/luci-app-familycontrol/root/usr/share/rpcd/acl.d/luci-app-familycontrol.json" \
+	>/dev/null
 
 docker run --rm --platform linux/amd64 \
 	-v "$repo_dir/luci-app-familycontrol/root:/src:ro" \

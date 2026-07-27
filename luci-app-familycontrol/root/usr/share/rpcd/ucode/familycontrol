@@ -10,6 +10,8 @@ const TELEMETRY_STATE = '/tmp/familycontrol-telemetry.json';
 const DURATION_BOUNDS = [ 0.1, 0.25, 0.5, 1, 2, 5 ];
 const PERSON_ID_PATTERN = /^[A-Za-z0-9_]+$/;
 const MAC_PATTERN = /^[0-9A-F]{2}(:[0-9A-F]{2}){5}$/;
+const NAME_PATTERN = /^[^[:cntrl:]]{1,40}$/;
+const MUTATION_LOCK = '/var/lock/familycontrol';
 
 function fail(code, message) {
 	return {
@@ -101,17 +103,64 @@ function firewallSection(personId) {
 	return FIREWALL_PREFIX + personId;
 }
 
-function applyFirewallRule(ctx, personId, devices, paused, settings) {
-	const section = firewallSection(personId);
-	const previous = ctx.get_all('firewall', section);
+function generatedFirewallSnapshot(ctx) {
+	let sections = [];
 
-	if (!paused) {
-		if (ctx.get('firewall', section))
-			ctx.delete('firewall', section);
+	ctx.foreach('firewall', 'rule', section => {
+		if (substr(section['.name'], 0, length(FIREWALL_PREFIX)) == FIREWALL_PREFIX)
+			push(sections, section);
+	});
+
+	return sections;
+}
+
+function familySnapshot(ctx) {
+	let sections = [];
+	ctx.foreach('familycontrol', null, section => push(sections, section));
+	return sections;
+}
+
+function restoreSections(ctx, packageName, sections, generatedOnly) {
+	let names = [];
+	ctx.foreach(packageName, null, section => {
+		if (!generatedOnly ||
+		    substr(section['.name'], 0, length(FIREWALL_PREFIX)) == FIREWALL_PREFIX)
+			push(names, section['.name']);
+	});
+	for (let name in names)
+		ctx.delete(packageName, name);
+
+	for (let section in sections) {
+		ctx.set(packageName, section['.name'], section['.type']);
+		for (let option, value in section)
+			if (substr(option, 0, 1) != '.')
+				ctx.set(packageName, section['.name'], option, value);
 	}
-	else {
+	ctx.commit(packageName);
+}
+
+function reconcile(ctx) {
+	const settings = ctx.get_all('familycontrol', 'main') || {};
+	let names = [];
+
+	ctx.foreach('firewall', 'rule', section => {
+		if (substr(section['.name'], 0, length(FIREWALL_PREFIX)) == FIREWALL_PREFIX)
+			push(names, section['.name']);
+	});
+	for (let name in names)
+		ctx.delete('firewall', name);
+
+	ctx.foreach('familycontrol', 'person', person => {
+		if (person.paused != '1')
+			return;
+
+		const devices = personDevices(ctx, person['.name']);
+		if (!length(devices))
+			return;
+
+		const section = firewallSection(person['.name']);
 		ctx.set('firewall', section, 'rule');
-		ctx.set('firewall', section, 'name', 'Family Control: ' + personId);
+		ctx.set('firewall', section, 'name', 'Family Control: ' + person['.name']);
 		ctx.set('firewall', section, 'src', settings.src_zone || 'lan');
 		ctx.set('firewall', section, 'dest', settings.dest_zone || 'wan');
 		ctx.set('firewall', section, 'proto', 'all');
@@ -119,28 +168,59 @@ function applyFirewallRule(ctx, personId, devices, paused, settings) {
 		ctx.set('firewall', section, 'target', 'REJECT');
 		ctx.set('firewall', section, 'enabled', '1');
 		ctx.set('firewall', section, 'src_mac', map(devices, device => device.mac));
-	}
+	});
 
 	ctx.commit('firewall');
-	let exitCode = system('/etc/init.d/firewall reload >/dev/null 2>&1');
+	return system('/etc/init.d/firewall reload >/dev/null 2>&1');
+}
 
-	if (exitCode != 0) {
-		if (ctx.get('firewall', section))
-			ctx.delete('firewall', section);
+function mutate(change) {
+	if (system('/bin/lock -w ' + MUTATION_LOCK) != 0)
+		return fail('busy', 'Another Family Control update is in progress');
 
-		if (previous) {
-			ctx.set('firewall', section, previous['.type']);
+	const ctx = cursor();
+	const previousFamily = familySnapshot(ctx);
+	const previousFirewall = generatedFirewallSnapshot(ctx);
+	const result = change(ctx);
 
-			for (let option, value in previous)
-				if (substr(option, 0, 1) != '.')
-					ctx.set('firewall', section, option, value);
-		}
-
-		ctx.commit('firewall');
-		system('/etc/init.d/firewall reload >/dev/null 2>&1');
+	if (!result.ok) {
+		system('/bin/lock -u ' + MUTATION_LOCK);
+		return result;
 	}
 
-	return exitCode;
+	ctx.commit('familycontrol');
+	if (reconcile(ctx) != 0) {
+		restoreSections(ctx, 'familycontrol', previousFamily, false);
+		restoreSections(ctx, 'firewall', previousFirewall, true);
+		system('/etc/init.d/firewall reload >/dev/null 2>&1');
+		system('/bin/lock -u ' + MUTATION_LOCK);
+		return fail('firewall_reload_failed', 'Firewall rejected the reconciled rules');
+	}
+
+	system('/bin/lock -u ' + MUTATION_LOCK);
+	return result;
+}
+
+function validName(value) {
+	return match(value || '', NAME_PATTERN);
+}
+
+function findDevice(ctx, deviceId) {
+	let device = null;
+	ctx.foreach('familycontrol', 'device', section => {
+		if (section['.name'] == deviceId)
+			device = section;
+	});
+	return device;
+}
+
+function duplicateMac(ctx, mac, exceptId) {
+	let duplicate = false;
+	ctx.foreach('familycontrol', 'device', section => {
+		if (section['.name'] != exceptId && normalizeMac(section.mac) == mac)
+			duplicate = true;
+	});
+	return duplicate;
 }
 
 function status() {
@@ -201,7 +281,6 @@ function connectedDevices() {
 function setPaused(request) {
 	const personId = request.args.person;
 	const paused = request.args.paused;
-	const ctx = cursor();
 	const started = monotonicSeconds();
 	const action = paused ? 'pause' : 'resume';
 
@@ -210,38 +289,116 @@ function setPaused(request) {
 		return fail('invalid_person', 'Invalid person identifier');
 	}
 
-	const person = findPerson(ctx, personId);
+	const result = mutate(ctx => {
+		const person = findPerson(ctx, personId);
+		if (!person)
+			return fail('person_not_found', 'Person does not exist');
 
-	if (!person) {
-		recordAction(action, 'error', monotonicSeconds() - started, false);
-		return fail('person_not_found', 'Person does not exist');
-	}
+		const devices = personDevices(ctx, personId);
+		if (paused && !length(devices))
+			return fail('no_devices', 'Assign at least one valid device before pausing');
 
-	const devices = personDevices(ctx, personId);
+		ctx.set('familycontrol', personId, 'paused', paused ? '1' : '0');
+		return {
+			ok: true,
+			person: personId,
+			paused,
+			device_count: length(devices)
+		};
+	});
 
-	if (paused && !length(devices)) {
-		recordAction(action, 'error', monotonicSeconds() - started, false);
-		return fail('no_devices', 'Assign at least one valid device before pausing');
-	}
+	recordAction(action, result.ok ? 'ok' : 'error',
+		monotonicSeconds() - started, result.code == 'firewall_reload_failed');
+	return result;
+}
 
-	const settings = ctx.get_all('familycontrol', 'main') || {};
-	const exitCode = applyFirewallRule(ctx, personId, devices, paused, settings);
+function savePerson(request) {
+	const personId = request.args.person || '';
+	const name = request.args.name || '';
 
-	if (exitCode != 0) {
-		recordAction(action, 'error', monotonicSeconds() - started, true);
-		return fail('firewall_reload_failed', 'Firewall rejected the generated rule');
-	}
+	if (!validName(name))
+		return fail('invalid_name', 'Name must be 1 to 40 printable characters');
+	if (personId && !match(personId, PERSON_ID_PATTERN))
+		return fail('invalid_person', 'Invalid person identifier');
 
-	ctx.set('familycontrol', personId, 'paused', paused ? '1' : '0');
-	ctx.commit('familycontrol');
-	recordAction(action, 'ok', monotonicSeconds() - started, false);
+	return mutate(ctx => {
+		let id = personId;
+		if (id) {
+			if (!findPerson(ctx, id))
+				return fail('person_not_found', 'Person does not exist');
+		}
+		else {
+			id = ctx.add('familycontrol', 'person');
+			ctx.set('familycontrol', id, 'paused', '0');
+		}
+		ctx.set('familycontrol', id, 'name', name);
+		return { ok: true, person: id };
+	});
+}
 
-	return {
-		ok: true,
-		person: personId,
-		paused,
-		device_count: length(devices)
-	};
+function deletePerson(request) {
+	const personId = request.args.person || '';
+	if (!match(personId, PERSON_ID_PATTERN))
+		return fail('invalid_person', 'Invalid person identifier');
+
+	return mutate(ctx => {
+		if (!findPerson(ctx, personId))
+			return fail('person_not_found', 'Person does not exist');
+
+		let devices = [];
+		ctx.foreach('familycontrol', 'device', section => {
+			if (section.person == personId)
+				push(devices, section['.name']);
+		});
+		for (let device in devices)
+			ctx.delete('familycontrol', device);
+		ctx.delete('familycontrol', personId);
+		return { ok: true, person: personId, deleted_devices: length(devices) };
+	});
+}
+
+function saveDevice(request) {
+	const deviceId = request.args.device || '';
+	const personId = request.args.person || '';
+	const name = request.args.name || '';
+	const mac = normalizeMac(request.args.mac);
+
+	if (deviceId && !match(deviceId, PERSON_ID_PATTERN))
+		return fail('invalid_device', 'Invalid device identifier');
+	if (!match(personId, PERSON_ID_PATTERN))
+		return fail('invalid_person', 'Invalid person identifier');
+	if (!validName(name))
+		return fail('invalid_name', 'Name must be 1 to 40 printable characters');
+	if (!match(mac, MAC_PATTERN))
+		return fail('invalid_mac', 'Invalid MAC address');
+
+	return mutate(ctx => {
+		if (!findPerson(ctx, personId))
+			return fail('person_not_found', 'Person does not exist');
+		if (deviceId && !findDevice(ctx, deviceId))
+			return fail('device_not_found', 'Device does not exist');
+		if (duplicateMac(ctx, mac, deviceId))
+			return fail('duplicate_mac', 'This MAC address is already assigned');
+
+		const id = deviceId || ctx.add('familycontrol', 'device');
+		ctx.set('familycontrol', id, 'name', name);
+		ctx.set('familycontrol', id, 'mac', mac);
+		ctx.set('familycontrol', id, 'person', personId);
+		return { ok: true, device: id, person: personId, mac };
+	});
+}
+
+function deleteDevice(request) {
+	const deviceId = request.args.device || '';
+	if (!match(deviceId, PERSON_ID_PATTERN))
+		return fail('invalid_device', 'Invalid device identifier');
+
+	return mutate(ctx => {
+		if (!findDevice(ctx, deviceId))
+			return fail('device_not_found', 'Device does not exist');
+		ctx.delete('familycontrol', deviceId);
+		return { ok: true, device: deviceId };
+	});
 }
 
 return {
@@ -258,6 +415,22 @@ return {
 				paused: false
 			},
 			call: setPaused
+		},
+		save_person: {
+			args: { person: '', name: '' },
+			call: savePerson
+		},
+		delete_person: {
+			args: { person: '' },
+			call: deletePerson
+		},
+		save_device: {
+			args: { device: '', person: '', name: '', mac: '' },
+			call: saveDevice
+		},
+		delete_device: {
+			args: { device: '' },
+			call: deleteDevice
 		}
 	}
 };

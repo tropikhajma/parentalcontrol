@@ -67,7 +67,7 @@ script or commit it to the repository.
 
 ## Privacy-safe telemetry
 
-Release `r14` adds an optional, disabled-by-default OpenTelemetry metrics
+Release `r15` includes an optional, disabled-by-default OpenTelemetry metrics
 exporter for Grafana Cloud. It reports aggregate Family Control enforcement
 health and basic router health without exporting names, MAC addresses, IP
 addresses, hostnames, or browsing activity.
@@ -97,18 +97,18 @@ verified file as a workflow artifact.
 The package built for OpenWrt 25.12.4 is:
 
 ```text
-dist/luci-app-familycontrol-0.1.0-r14.apk
-SHA-256: 0c8460d6d0594b7419ba9db2def2d8fdf0d6006a8ef068d5e255a56d2cb67a17
+dist/luci-app-familycontrol-0.1.0-r15.apk
+SHA-256: 036578e2261d6335bff9781cdb6a62af8d801d3dc6e0987b5cd45ea57b99d3c6
 ```
 
 Copy it to the router, install it, and restart rpcd:
 
 ```sh
 ssh root@openwrt \
-  'cat > /tmp/luci-app-familycontrol-0.1.0-r14.apk' \
-  < dist/luci-app-familycontrol-0.1.0-r14.apk
+  'cat > /tmp/luci-app-familycontrol-0.1.0-r15.apk' \
+  < dist/luci-app-familycontrol-0.1.0-r15.apk
 ssh root@openwrt
-apk add --allow-untrusted /tmp/luci-app-familycontrol-0.1.0-r14.apk
+apk add --allow-untrusted /tmp/luci-app-familycontrol-0.1.0-r15.apk
 /etc/init.d/rpcd restart
 ```
 

@@ -70,8 +70,9 @@ config device
 ```
 
 UCI section names are stable machine identifiers. Display names may change. MAC
-addresses are normalized by the enforcement backend. The management UI
-validates their format; duplicate-address validation is still to be added.
+addresses are normalized by the enforcement backend. Narrow backend CRUD
+methods validate their format, ownership, and uniqueness; the restricted family
+account has no generic UCI write access.
 
 Shared devices are not assigned to several people in the first release. They
 remain unassigned and unmanaged.
@@ -81,13 +82,14 @@ remain unassigned and unmanaged.
 `familycontrol` is the source of truth. Generated firewall state is an
 implementation detail and must be recognizable as application-owned.
 
-Pause/resume follows this transaction:
+Every person/device mutation and pause/resume follows this transaction:
 
-1. validate the requested person and all assigned MAC addresses;
-2. update generated firewall state;
-3. reload only what is necessary;
-4. verify that the new state was accepted; and
-5. persist or report the result without silently claiming success.
+1. acquire the Family Control mutation lock;
+2. validate identifiers, names, ownership, uniqueness, and MAC addresses;
+3. snapshot Family Control and application-owned firewall state;
+4. apply the desired configuration and regenerate all application-owned rules;
+5. reload the firewall once; and
+6. report success, or restore both snapshots when reload fails.
 
 The implementation must cover both IPv4 and IPv6 forwarded internet traffic.
 Local LAN access is unaffected by default.
@@ -97,6 +99,10 @@ person. The rule rejects all protocols, covers both address families, and
 contains every valid MAC assigned to that person. Direct nftables sets are a
 later optimization if measurements show that firewall reload latency is
 unacceptable.
+
+The standalone app is the configuration interface. The older generic LuCI
+People & Devices form was removed because direct UCI writes could bypass the
+transaction and leave paused state out of sync with enforcement.
 
 ## Existing `luci-app-access-control`
 

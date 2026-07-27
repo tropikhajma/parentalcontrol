@@ -18,14 +18,5 @@
 			"type": "view",
 			"path": "familycontrol/overview"
 		}
-	},
-	"admin/services/familycontrol/manage": {
-		"title": "People & Devices",
-		"order": 20,
-		"action": {
-			"type": "view",
-			"path": "familycontrol/manage"
-		}
 	}
 }
-

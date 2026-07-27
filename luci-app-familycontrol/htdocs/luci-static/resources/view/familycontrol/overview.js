@@ -117,10 +117,10 @@ return view.extend({
 		if (!data.people.length)
 			return E('div', { 'class': 'fc-empty' }, [
 				E('h3', {}, _('No people yet')),
-				E('p', {}, _('Add a person and assign their devices on the People & Devices page.')),
+				E('p', {}, _('Add a person and assign their devices in the Family Control app.')),
 				E('a', {
 					'class': 'btn cbi-button-action',
-					'href': L.url('admin/services/familycontrol/manage')
+					'href': '/family/'
 				}, _('Add people'))
 			]);
 

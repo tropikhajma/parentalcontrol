@@ -46,25 +46,67 @@ docker run --rm --platform linux/amd64 --cap-add NET_ADMIN \
 		test "$(uci get familycontrol.alice.paused)" = 1
 		test "$(uci get firewall.familycontrol_alice.family)" = any
 		test "$(uci get firewall.familycontrol_alice.target)" = REJECT
-			test "$(uci get firewall.familycontrol_alice.src_mac)" = \
-				"00:11:22:33:44:55 AA:BB:CC:DD:EE:FF"
-			fw4 check
+		test "$(uci get firewall.familycontrol_alice.src_mac)" = \
+			"00:11:22:33:44:55 AA:BB:CC:DD:EE:FF"
 
-			telemetry="$(ucode \
-				/src/luci-app-familycontrol/root/usr/libexec/familycontrol-otel-payload)"
-			echo "$telemetry" | jsonfilter \
-				-e "@.resourceMetrics[0].resource.attributes[0].value.stringValue" |
-				grep -qx familycontrol
-			echo "$telemetry" |
-				grep -Eq "\"name\":[[:space:]]*\"familycontrol.enforcement.drift\""
-			echo "$telemetry" |
-				grep -Eq "\"name\":[[:space:]]*\"familycontrol.action.duration\""
+		# A device added to an already paused person is blocked immediately.
+		added="$(ubus call familycontrol save_device \
+			"{\"person\":\"alice\",\"name\":\"New phone\",\"mac\":\"DE:AD:BE:EF:00:01\"}")"
+		echo "$added" | jsonfilter -e "@.ok" | grep -qx true
+		new_device="$(echo "$added" | jsonfilter -e "@.device")"
+		test "$(uci get firewall.familycontrol_alice.src_mac)" = \
+			"00:11:22:33:44:55 AA:BB:CC:DD:EE:FF DE:AD:BE:EF:00:01"
+		duplicate="$(ubus call familycontrol save_device \
+			"{\"person\":\"alice\",\"name\":\"Duplicate\",\"mac\":\"DE:AD:BE:EF:00:01\"}")"
+		echo "$duplicate" | jsonfilter -e "@.code" | grep -qx duplicate_mac
 
-			ubus call familycontrol set_paused \
-			"{\"person\":\"alice\",\"paused\":false}" >/dev/null
+		# Moving a device away from a paused person removes it from that rule.
+		bob="$(ubus call familycontrol save_person \
+			"{\"name\":\"Bob\"}" | jsonfilter -e "@.person")"
+		ubus call familycontrol save_device \
+			"{\"device\":\"$new_device\",\"person\":\"$bob\",\"name\":\"New phone\",\"mac\":\"DE:AD:BE:EF:00:01\"}" \
+			>/dev/null
+		test "$(uci get firewall.familycontrol_alice.src_mac)" = \
+			"00:11:22:33:44:55 AA:BB:CC:DD:EE:FF"
+		! uci -q get "firewall.familycontrol_$bob"
 
-		test "$(uci get familycontrol.alice.paused)" = 0
+		# Removing the only device from a paused person removes its rule.
+		ubus call familycontrol set_paused \
+			"{\"person\":\"$bob\",\"paused\":true}" >/dev/null
+		uci -q get "firewall.familycontrol_$bob" >/dev/null
+		ubus call familycontrol delete_device \
+			"{\"device\":\"$new_device\"}" >/dev/null
+		! uci -q get "firewall.familycontrol_$bob"
+
+		# Failed reloads restore both family configuration and firewall rules.
+		touch /tmp/firewall-fail
+		failed="$(ubus call familycontrol save_device \
+			"{\"person\":\"alice\",\"name\":\"Failed phone\",\"mac\":\"DE:AD:BE:EF:00:02\"}")"
+		echo "$failed" | jsonfilter -e "@.ok" | grep -qx false
+		echo "$failed" | jsonfilter -e "@.code" | grep -qx firewall_reload_failed
+		! uci show familycontrol | grep -q "DE:AD:BE:EF:00:02"
+		test "$(uci get firewall.familycontrol_alice.src_mac)" = \
+			"00:11:22:33:44:55 AA:BB:CC:DD:EE:FF"
+		rm /tmp/firewall-fail
+
+		# Deleting a paused person removes devices and the generated rule.
+		ubus call familycontrol delete_person \
+			"{\"person\":\"alice\"}" >/dev/null
+		! uci -q get familycontrol.alice
+		! uci -q get familycontrol.alice_phone
+		! uci -q get familycontrol.alice_laptop
 		! uci -q get firewall.familycontrol_alice
+		fw4 check
+
+		telemetry="$(ucode \
+			/src/luci-app-familycontrol/root/usr/libexec/familycontrol-otel-payload)"
+		echo "$telemetry" | jsonfilter \
+			-e "@.resourceMetrics[0].resource.attributes[0].value.stringValue" |
+			grep -qx familycontrol
+		echo "$telemetry" |
+			grep -Eq "\"name\":[[:space:]]*\"familycontrol.enforcement.drift\""
+		echo "$telemetry" |
+			grep -Eq "\"name\":[[:space:]]*\"familycontrol.action.duration\""
 	'
 
 echo "OpenWrt integration checks passed."

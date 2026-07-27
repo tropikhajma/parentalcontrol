@@ -2,7 +2,7 @@
 
 Date: 2026-07-26
 
-Scope: Family Control `0.1.0-r14`, the live OpenWrt 25.12.4 deployment, its
+Scope: Family Control `0.1.0-r15`, the live OpenWrt 25.12.4 deployment, its
 standalone web interface, rpcd/ucode backend, UCI and firewall4 integration,
 Endora DNS, Let's Encrypt/ACME-DNS certificate automation, and the planned
 Tailscale connection. It also covers the optional Grafana Cloud OpenTelemetry
@@ -22,14 +22,12 @@ interpolate user input into shell commands.
 
 The largest risks are inside that boundary:
 
-1. displayed policy can diverge from actual firewall policy after device edits;
-2. the application is still usable over unencrypted HTTP;
-3. the restricted account can perform generic UCI writes instead of using
-   validated domain operations;
-4. the family interface shares uHTTPd and an origin with the full LuCI surface;
-5. MAC addresses are convenient identifiers, not strong device identities.
+1. the application is still usable over unencrypted HTTP;
+2. the family interface shares uHTTPd and an origin with the full LuCI surface;
+3. MAC addresses are convenient identifiers, not strong device identities.
 
-The first three should be addressed before adding remote access or schedules.
+HTTP exposure and origin isolation should be addressed before adding remote
+access or schedules.
 Tailscale should be treated as transport-level access control, not as a
 replacement for application authorization.
 
@@ -128,20 +126,23 @@ not reduce the web code and endpoints exposed on that origin.
 
 ### R1 — Paused state can drift from device assignments
 
-**Rating: High — current**
+**Rating: Low residual — mitigated in r15**
 
-Firewall rules are generated only by `set_paused`. Adding, removing, or
-changing a device uses generic UCI methods and does not regenerate an existing
-paused person's rule. A new device may therefore retain internet access while
-the UI says the person is paused. A removed device may remain blocked until
-the person is resumed. Direct UCI deletion of a paused person can also leave an
-orphan firewall rule.
+All standalone-app person and device mutations now use validated backend
+methods under an exclusive lock. Each mutation regenerates every
+`familycontrol_*` rule from desired state and reloads the firewall once. Adding
+or moving a device to a paused person blocks it before success is returned;
+moving or deleting it removes the obsolete match; deleting a paused person
+removes its devices and rule. A reload failure restores both Family Control
+configuration and generated firewall sections.
 
-**Mitigation:** Make all mutations backend domain operations. Under a lock,
-validate the complete configuration, write it, reconcile all
-`familycontrol_*` firewall sections to desired state, reload, verify, and only
-then report success. Reconcile on service start and after firewall restart.
-Add tests for editing, moving, and deleting devices while paused.
+The former generic LuCI People & Devices editor was removed so it cannot bypass
+this path. Root can still create drift through direct UCI or firewall edits,
+and reconciliation does not yet run automatically after boot or an unrelated
+firewall restart.
+
+**Further mitigation:** Reconcile on service start and after firewall restart,
+and verify rendered nftables state rather than only a successful reload.
 
 ### R2 — Credentials and sessions remain available over HTTP
 
@@ -159,19 +160,15 @@ HTTP never accepts credentials.
 
 ### R3 — Generic UCI write permission bypasses domain validation
 
-**Rating: High — current**
+**Rating: Low residual — mitigated in r15**
 
-The family ACL grants `uci.add`, `set`, `delete`, and `commit` for the complete
-`familycontrol` package. This is narrower than router-wide UCI access, but it
-still lets a compromised family session bypass UI validation, change source or
-destination zones, introduce duplicate MAC addresses and dangling owners, or
-create state the enforcement API does not understand.
+The family ACL no longer grants generic UCI read or write methods. It exposes
+only `status`, discovery, pause/resume, and narrow person/device CRUD methods.
+The backend validates names, identifiers, MAC syntax, ownership, and MAC
+uniqueness before committing and reconciling.
 
-**Mitigation:** Remove UCI write methods from the family ACL. Expose narrow
-backend methods such as `save_person`, `delete_person`, `save_device`, and
-`delete_device`. Enforce length, type, referential-integrity, uniqueness, and
-zone allow-list checks in the backend. Return a read-only model rather than
-generic UCI data where practical.
+Root and other privileged LuCI sessions remain able to edit UCI directly, which
+is an administrative capability outside the restricted family account.
 
 ### R4 — Family UI shares the LuCI administrative attack surface
 
@@ -206,26 +203,30 @@ rather than client-asserted MAC alone.
 
 ### R6 — Firewall/config update is not one atomic transaction
 
-**Rating: Medium-high — current**
+**Rating: Medium residual — partially mitigated in r15**
 
-Pause/resume commits and reloads the firewall before committing the displayed
-paused state. Concurrent operations have no explicit lock. A process crash,
-storage error, or overlapping request can produce mismatch or rollback over
-another change. Reloading the whole firewall for every toggle also increases
-latency and network-wide failure impact.
+Mutations are now serialized by an exclusive lock and use one desired-state
+reconciler. Family configuration and generated firewall sections are
+snapshotted and restored when reload fails. This protects normal failures and
+overlapping family-app requests, but the UCI commits and firewall reload are
+still not one atomic transaction: process or power loss between them can leave
+temporary mismatch. Reloading the whole firewall for every mutation also
+increases latency and network-wide failure impact.
 
-**Mitigation:** Serialize mutations with a lock, calculate desired state first,
-use one reconciliation path, and verify both UCI and nftables state. Prefer a
-dedicated nftables set/table or an include that can be changed atomically
-without a full firewall reload. Maintain a last-known-good configuration.
+**Further mitigation:** Reconcile after boot, verify UCI and nftables state,
+and prefer a dedicated nftables set/table or include that can be changed
+atomically without a full firewall reload. Maintain a last-known-good
+configuration outside the in-process snapshot.
 
 ### R7 — Missing ongoing enforcement reconciliation and health signal
 
 **Rating: Medium-high — current**
 
-The UI reports the UCI `paused` flag, not verified live firewall state. Manual
-firewall edits, package upgrades, reload failures, or generated-rule removal
-can therefore go unnoticed.
+The UI reports the UCI `paused` flag, not verified live firewall state. The
+telemetry drift gauge compares desired configuration with generated firewall
+UCI sections, but not the rendered nftables rules, and it is not shown in the
+control UI. Manual nftables edits, package upgrades, restart failures, or
+generated-rule removal can therefore go unnoticed locally.
 
 **Mitigation:** Make status compare desired configuration with rendered/live
 enforcement. Show `enforced`, `pending`, or `error`, record the last successful
@@ -371,13 +372,17 @@ only if its operational and renewal risks are explicitly addressed.
 
 ### P0 — Before remote access or new features
 
-1. Replace generic UCI writes with validated backend CRUD methods.
-2. Add one locked reconciliation engine and use it for every mutation.
-3. Reconcile edits to paused people immediately and verify live enforcement.
-4. Make the family hostname HTTPS-only while preserving separate recovery
+Completed in r15: generic UCI writes were replaced with validated CRUD, one
+locked reconciler is used for every family-app mutation, paused-person edits
+reconcile immediately, and drift/orphan/duplicate/rollback regressions are
+tested.
+
+Remaining:
+
+1. Make the family hostname HTTPS-only while preserving separate recovery
    access.
-5. Add regression tests for enforcement drift, orphan rules, duplicate MACs,
-   invalid owners, reload failure, and concurrent requests.
+2. Reconcile and verify live enforcement after boot and firewall restart.
+3. Add explicit concurrent-request regression tests.
 
 ### P1 — Reduce compromise blast radius
 
