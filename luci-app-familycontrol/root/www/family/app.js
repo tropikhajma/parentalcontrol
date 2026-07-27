@@ -88,7 +88,8 @@ async function load() {
 				'.type': 'device',
 				name: device.name,
 				mac: device.mac,
-				person: person.id
+				person: person.id,
+				connected: device.connected
 			};
 	}
 	render(status.people || []);
@@ -118,7 +119,11 @@ function render(people) {
 			</div>
 			${owned.map(device => `<div class="card">
 				<strong>${escapeHtml(device.name || device.mac)}</strong>
-				<div class="meta">${escapeHtml(device.mac)}</div>
+				<div class="meta">${escapeHtml(device.mac)} ·
+					<span class="connection ${device.connected ? 'connected' : 'disconnected'}">
+						<span class="status-dot"></span>${device.connected ? 'Connected' : 'Not connected'}
+					</span>
+				</div>
 				<div class="actions">
 					<button class="secondary" data-action="edit-device" data-id="${device['.name']}">Edit</button>
 					<button class="danger" data-action="delete-device" data-id="${device['.name']}">Remove</button>
@@ -406,3 +411,8 @@ $('people').addEventListener('click', async event => {
 		showLogin();
 	}
 })();
+
+globalThis.setInterval(() => {
+	if (session && !document.querySelector('dialog[open]'))
+		load().catch(() => {});
+}, 30000);

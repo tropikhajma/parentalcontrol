@@ -182,7 +182,22 @@ function findPerson(ctx, personId) {
 	return person;
 }
 
-function personDevices(ctx, personId) {
+function connectedMacs() {
+	const arp = readfile('/proc/net/arp') || '';
+	let connected = {};
+
+	for (let line in split(trim(arp), '\n')) {
+		const fields = split(line, /[ \t]+/);
+		if (length(fields) >= 6 && fields[2] == '0x2') {
+			const mac = normalizeMac(fields[3]);
+			if (match(mac, MAC_PATTERN))
+				connected[mac] = true;
+		}
+	}
+	return connected;
+}
+
+function personDevices(ctx, personId, connected) {
 	let devices = [];
 
 	ctx.foreach('familycontrol', 'device', section => {
@@ -193,7 +208,8 @@ function personDevices(ctx, personId) {
 				push(devices, {
 					id: section['.name'],
 					name: section.name || mac,
-					mac
+					mac,
+					connected: connected ? !!connected[mac] : null
 				});
 		}
 	});
@@ -376,6 +392,7 @@ function duplicateMac(ctx, mac, exceptId) {
 function status() {
 	const ctx = cursor();
 	const now = time();
+	const connected = connectedMacs();
 	let people = [];
 
 	ctx.foreach('familycontrol', 'person', section => {
@@ -391,7 +408,7 @@ function status() {
 			dayoff_schedule: section.dayoff_schedule || DEFAULT_SCHEDULE,
 			school_night_cutoff: +(section.school_night_cutoff || 1320),
 			dayoff_night_cutoff: +(section.dayoff_night_cutoff || 1320),
-			devices: personDevices(ctx, section['.name'])
+			devices: personDevices(ctx, section['.name'], connected)
 		});
 	});
 

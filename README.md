@@ -70,7 +70,7 @@ script or commit it to the repository.
 
 ## Privacy-safe telemetry
 
-Release `r16` includes an optional, disabled-by-default OpenTelemetry metrics
+Release `r17` includes an optional, disabled-by-default OpenTelemetry metrics
 exporter for Grafana Cloud. It reports aggregate Family Control enforcement
 health and basic router health without exporting names, MAC addresses, IP
 addresses, hostnames, or browsing activity.
@@ -100,18 +100,18 @@ verified file as a workflow artifact.
 The package built for OpenWrt 25.12.4 is:
 
 ```text
-dist/luci-app-familycontrol-0.1.0-r16.apk
-SHA-256: bcd834f3efabd96d7004ad8c8d1463c84a23c524c2bef94b8804c1a4a6f864a6
+dist/luci-app-familycontrol-0.1.0-r17.apk
+SHA-256: 15ee72fe32c4742e81eb0f96acddc39d63aaf201d4b21962b064d0a0ce4efb70
 ```
 
 Copy it to the router, install it, and restart rpcd:
 
 ```sh
 ssh root@openwrt \
-  'cat > /tmp/luci-app-familycontrol-0.1.0-r16.apk' \
-  < dist/luci-app-familycontrol-0.1.0-r16.apk
+  'cat > /tmp/luci-app-familycontrol-0.1.0-r17.apk' \
+  < dist/luci-app-familycontrol-0.1.0-r17.apk
 ssh root@openwrt
-apk add --allow-untrusted /tmp/luci-app-familycontrol-0.1.0-r16.apk
+apk add --allow-untrusted /tmp/luci-app-familycontrol-0.1.0-r17.apk
 /etc/init.d/rpcd restart
 /etc/init.d/familycontrol-scheduler restart
 ```
@@ -160,7 +160,10 @@ passwd familycontrol
 
 When adding a device, the interface offers current DHCP clients by hostname,
 IP address, and MAC address. Manual MAC entry remains available for offline or
-statically configured devices.
+statically configured devices. Saved devices show a Connected or Not connected
+indicator based on the router's validated neighbour table, rather than the
+longer-lived DHCP lease. The page refreshes this state every 30 seconds while
+no editor is open.
 
 ## Schedules and school calendar
 

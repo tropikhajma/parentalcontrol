@@ -31,6 +31,8 @@ docker run --rm --platform linux/amd64 --cap-add NET_ADMIN \
 		echo "$status" | jsonfilter -e "@.people[0].id" | grep -qx alice
 		echo "$status" | jsonfilter -e "@.people[0].devices[1].mac" |
 			grep -qx "AA:BB:CC:DD:EE:FF"
+		echo "$status" | jsonfilter -e "@.people[0].devices[0].connected" |
+			grep -qx false
 
 		ubus call familycontrol save_calendar \
 			"{\"day_off\":[\"2026-10-30\"],\"school_day\":[\"2026-11-17\"]}" \
