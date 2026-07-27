@@ -6,7 +6,10 @@ The first release will let an administrator:
 
 - create a person;
 - assign one or more devices to that person;
-- pause or resume internet access for all of the person's devices; and
+- pause, resume, or schedule internet access for all of the person's devices;
+- grant temporary extra time;
+- distinguish school days from days off using Czech public holidays and
+  school-specific exceptions; and
 - use the same LuCI interface remotely over Tailscale.
 
 See [docs/design.md](docs/design.md) for the initial architecture and scope,
@@ -67,7 +70,7 @@ script or commit it to the repository.
 
 ## Privacy-safe telemetry
 
-Release `r15` includes an optional, disabled-by-default OpenTelemetry metrics
+Release `r16` includes an optional, disabled-by-default OpenTelemetry metrics
 exporter for Grafana Cloud. It reports aggregate Family Control enforcement
 health and basic router health without exporting names, MAC addresses, IP
 addresses, hostnames, or browsing activity.
@@ -97,19 +100,20 @@ verified file as a workflow artifact.
 The package built for OpenWrt 25.12.4 is:
 
 ```text
-dist/luci-app-familycontrol-0.1.0-r15.apk
-SHA-256: 036578e2261d6335bff9781cdb6a62af8d801d3dc6e0987b5cd45ea57b99d3c6
+dist/luci-app-familycontrol-0.1.0-r16.apk
+SHA-256: bcd834f3efabd96d7004ad8c8d1463c84a23c524c2bef94b8804c1a4a6f864a6
 ```
 
 Copy it to the router, install it, and restart rpcd:
 
 ```sh
 ssh root@openwrt \
-  'cat > /tmp/luci-app-familycontrol-0.1.0-r15.apk' \
-  < dist/luci-app-familycontrol-0.1.0-r15.apk
+  'cat > /tmp/luci-app-familycontrol-0.1.0-r16.apk' \
+  < dist/luci-app-familycontrol-0.1.0-r16.apk
 ssh root@openwrt
-apk add --allow-untrusted /tmp/luci-app-familycontrol-0.1.0-r15.apk
+apk add --allow-untrusted /tmp/luci-app-familycontrol-0.1.0-r16.apk
 /etc/init.d/rpcd restart
+/etc/init.d/familycontrol-scheduler restart
 ```
 
 The package is unsigned because it is a local development build. Verify its
@@ -157,6 +161,37 @@ passwd familycontrol
 When adding a device, the interface offers current DHCP clients by hostname,
 IP address, and MAC address. Manual MAC entry remains available for offline or
 statically configured devices.
+
+## Schedules and school calendar
+
+Each person can be **Online**, **Paused**, or set to **Use schedule**. Select
+the person's name to edit two half-hour schedules:
+
+- **School day** controls availability on a school day.
+- **Day off** controls availability on weekends, Czech public holidays, and
+  additional days off.
+
+Two evening cutoffs answer a separate question: whether tomorrow is a school
+day or a day off. This allows an earlier bedtime before school and a later one
+before weekends or holidays. New schedules default to online from 06:00 to
+22:00.
+
+The **Extra time** menu adds 15, 30, or 60 minutes and can be used repeatedly.
+During scheduled online time it extends the next cutoff; while paused or
+outside the schedule it grants temporary online access. Choosing Online,
+Paused, or Use schedule cancels the temporary override.
+
+The bundled Czech statutory-holiday calendar covers 2026 through 2035 and is
+generated deterministically with:
+
+```sh
+npm run holidays
+```
+
+Use **School calendar** in the standalone app for school vacations,
+director-declared days off, or exceptional school Saturdays. An explicit
+School day entry overrides weekends and public holidays; otherwise an explicit
+Day off entry overrides the normal weekday classification.
 
 For LAN name resolution, configure dnsmasq to answer locally and not forward
 IPv6 queries to public DNS:

@@ -1,8 +1,8 @@
 # Architecture risk analysis
 
-Date: 2026-07-26
+Date: 2026-07-27
 
-Scope: Family Control `0.1.0-r15`, the live OpenWrt 25.12.4 deployment, its
+Scope: Family Control `0.1.0-r16`, the live OpenWrt 25.12.4 deployment, its
 standalone web interface, rpcd/ucode backend, UCI and firewall4 integration,
 Endora DNS, Let's Encrypt/ACME-DNS certificate automation, and the planned
 Tailscale connection. It also covers the optional Grafana Cloud OpenTelemetry
@@ -22,12 +22,11 @@ interpolate user input into shell commands.
 
 The largest risks are inside that boundary:
 
-1. the application is still usable over unencrypted HTTP;
-2. the family interface shares uHTTPd and an origin with the full LuCI surface;
-3. MAC addresses are convenient identifiers, not strong device identities.
+1. the family interface shares uHTTPd and an origin with the full LuCI surface;
+2. MAC addresses are convenient identifiers, not strong device identities;
+3. scheduled enforcement depends on the router clock and minute scheduler.
 
-HTTP exposure and origin isolation should be addressed before adding remote
-access or schedules.
+Origin isolation should be addressed before adding remote access.
 Tailscale should be treated as transport-level access control, not as a
 replacement for application authorization.
 
@@ -368,6 +367,29 @@ independent Grafana-side rule, cap label cardinality, monitor free-tier usage,
 and keep local enforcement status authoritative. Consider certificate pinning
 only if its operational and renewal risks are explicitly addressed.
 
+### R16 — Clock, calendar, or scheduler failure can apply the wrong policy
+
+**Rating: Medium — mitigated, operational dependency remains**
+
+Scheduled access depends on the router's local clock, Europe/Prague daylight
+saving rules, the minute-aligned scheduler, and correct classification of
+school days. A bad clock, stopped service, expired statutory-holiday data, or
+missing school-specific vacation can leave a child online or offline at the
+wrong time. Deliberate changes require root access, but ordinary time-sync and
+calendar-maintenance failures are plausible.
+
+The scheduler is supervised by procd and performs an idempotent reconciliation:
+unchanged policy does not write flash or reload firewall4. Mutations reconcile
+immediately, impossible dates are rejected, explicit school-day overrides take
+precedence, and the bundled Czech holiday calendar records its 2035 expiry.
+Manual Online and Paused modes remain available if scheduling is unhealthy.
+
+**Mitigation:** Show clock/calendar/scheduler health in the UI, warn well before
+the holiday calendar expires, test DST boundaries and next-day cutoff behavior,
+and alert when the scheduler has not checked in. Keep school vacation and
+director-day exceptions current. Reconcile at boot and after firewall restart,
+and document manual-mode recovery.
+
 ## Recommended remediation sequence
 
 ### P0 — Before remote access or new features
@@ -379,10 +401,9 @@ tested.
 
 Remaining:
 
-1. Make the family hostname HTTPS-only while preserving separate recovery
-   access.
-2. Reconcile and verify live enforcement after boot and firewall restart.
-3. Add explicit concurrent-request regression tests.
+1. Reconcile and verify live enforcement after boot and firewall restart.
+2. Add explicit concurrent-request regression tests.
+3. Add clock, calendar-expiry, and scheduler-health indications.
 
 ### P1 — Reduce compromise blast radius
 

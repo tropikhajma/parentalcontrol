@@ -32,6 +32,15 @@ docker run --rm --platform linux/amd64 --cap-add NET_ADMIN \
 		echo "$status" | jsonfilter -e "@.people[0].devices[1].mac" |
 			grep -qx "AA:BB:CC:DD:EE:FF"
 
+		ubus call familycontrol save_calendar \
+			"{\"day_off\":[\"2026-10-30\"],\"school_day\":[\"2026-11-17\"]}" \
+			>/dev/null
+		test "$(uci get familycontrol.main.day_off)" = 2026-10-30
+		test "$(uci get familycontrol.main.school_day)" = 2026-11-17
+		invalid_date="$(ubus call familycontrol save_calendar \
+			"{\"day_off\":[\"2026-02-30\"],\"school_day\":[]}")"
+		echo "$invalid_date" | jsonfilter -e "@.code" | grep -qx invalid_date
+
 		devices="$(ubus call familycontrol devices)"
 		echo "$devices" | jsonfilter -e "@.devices[0].hostname" |
 			grep -qx alice-laptop
@@ -48,6 +57,27 @@ docker run --rm --platform linux/amd64 --cap-add NET_ADMIN \
 		test "$(uci get firewall.familycontrol_alice.target)" = REJECT
 		test "$(uci get firewall.familycontrol_alice.src_mac)" = \
 			"00:11:22:33:44:55 AA:BB:CC:DD:EE:FF"
+
+		# A schedule with no online slots blocks the person. Extra time grants
+		# temporary access, and tick restores enforcement when it expires.
+		zeros=000000000000000000000000000000000000000000000000
+		ubus call familycontrol save_schedule \
+			"{\"person\":\"alice\",\"school_schedule\":\"$zeros\",\"dayoff_schedule\":\"$zeros\",\"school_night_cutoff\":1320,\"dayoff_night_cutoff\":1320}" \
+			>/dev/null
+		ubus call familycontrol set_mode \
+			"{\"person\":\"alice\",\"mode\":\"schedule\"}" >/dev/null
+		uci -q get firewall.familycontrol_alice >/dev/null
+		extra="$(ubus call familycontrol add_extra \
+			"{\"person\":\"alice\",\"minutes\":15}")"
+		echo "$extra" | jsonfilter -e "@.extra_until" | grep -Eq "^[0-9]+$"
+		! uci -q get firewall.familycontrol_alice
+		uci set familycontrol.alice.extra_until=1
+		uci commit familycontrol
+		ubus call familycontrol tick >/dev/null
+		uci -q get firewall.familycontrol_alice >/dev/null
+		reloads="$(wc -l </tmp/firewall-reloads)"
+		ubus call familycontrol tick >/dev/null
+		test "$(wc -l </tmp/firewall-reloads)" = "$reloads"
 
 		# A device added to an already paused person is blocked immediately.
 		added="$(ubus call familycontrol save_device \

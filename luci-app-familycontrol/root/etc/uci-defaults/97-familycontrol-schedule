@@ -1,0 +1,14 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+calendar=/usr/share/familycontrol/cz-holidays-2026-2035.txt
+
+uci -q set familycontrol.main.holiday_calendar='cz-2026-2035'
+uci -q delete familycontrol.main.holiday
+while IFS= read -r date; do
+	[ -n "$date" ] && uci -q add_list familycontrol.main.holiday="$date"
+done <"$calendar"
+uci -q set familycontrol.main.holiday_valid_until='2035-12-31'
+uci -q commit familycontrol
+
+exit 0

@@ -22,6 +22,7 @@
 		button.secondary { background:#e4ece8; color:#18332c }
 		button.danger { background:#b42318 }
 		button:disabled { opacity:.5 }
+		.link-button { min-height:auto; padding:0; background:transparent; color:inherit; text-align:left }
 		.card { background:white; border:1px solid #d9e3de; border-radius:1rem; padding:1rem; margin:.8rem 0; box-shadow:0 1px 3px #173f3512 }
 		.row { display:flex; align-items:center; justify-content:space-between; gap:.8rem }
 		.actions { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.8rem }
@@ -36,6 +37,14 @@
 		.error { padding:.75rem; border-radius:.6rem; background:#fee4e2; color:#8a1c13; margin:.7rem 0 }
 		.empty { text-align:center; padding:2rem 1rem; color:#61736d }
 		#login { max-width:25rem; margin:12vh auto }
+		details { position:relative }
+		summary { cursor:pointer; min-height:2.8rem; padding:.65rem 1rem; border-radius:.7rem; background:#e4ece8; font-weight:650; list-style:none }
+		details[open] { display:flex; flex-wrap:wrap; gap:.5rem; width:100% }
+		details[open] summary { width:100% }
+		.slot-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:.3rem; margin-bottom:1rem }
+		.slot { min-height:2.3rem; padding:.35rem; border:1px solid #aebdb7; background:white; color:#18332c; font-size:.82rem }
+		.slot.selected { background:#176b55; border-color:#176b55; color:white }
+		#schedule-dialog { width:min(96vw,42rem) }
 		@media(max-width:32rem) { .row { align-items:stretch; flex-direction:column } .row>button { width:100% } }
 	</style>
 </head>
@@ -61,7 +70,10 @@
 		</header>
 		<div id="error" class="error hidden"></div>
 		<div id="people"></div>
-		<button id="add-person">Add person</button>
+		<div class="actions">
+			<button id="add-person">Add person</button>
+			<button id="open-calendar" class="secondary">School calendar</button>
+		</div>
 	</section>
 </main>
 
@@ -93,6 +105,41 @@
 		</div>
 		<div class="actions">
 			<button type="submit">Save</button>
+			<button type="button" class="secondary cancel">Cancel</button>
+		</div>
+	</form>
+</dialog>
+<dialog id="calendar-dialog">
+	<form id="calendar-form">
+		<h2>School calendar</h2>
+		<p class="meta">Czech public holidays and weekends are automatic. Add school-specific exceptions here.</p>
+		<label for="exception-date">Date</label>
+		<input id="exception-date" type="date">
+		<label for="exception-kind">Treat as</label>
+		<select id="exception-kind">
+			<option value="day_off">Day off</option>
+			<option value="school_day">School day</option>
+		</select>
+		<div class="actions"><button id="add-exception" type="button" class="secondary">Add date</button></div>
+		<div id="calendar-exceptions"></div>
+		<div class="actions">
+			<button type="submit">Save calendar</button>
+			<button type="button" class="secondary cancel">Cancel</button>
+		</div>
+	</form>
+</dialog>
+<dialog id="schedule-dialog">
+	<form id="schedule-form">
+		<h2 id="schedule-title">Schedule</h2>
+		<input id="schedule-person" type="hidden">
+		<h3>School day</h3><div id="school-slots" class="slot-grid"></div>
+		<h3>Day off</h3><div id="dayoff-slots" class="slot-grid"></div>
+		<label for="school-cutoff">Cutoff when tomorrow is a school day</label>
+		<select id="school-cutoff"></select>
+		<label for="dayoff-cutoff">Cutoff when tomorrow is off</label>
+		<select id="dayoff-cutoff"></select>
+		<div class="actions">
+			<button type="submit">Save schedule</button>
 			<button type="button" class="secondary cancel">Cancel</button>
 		</div>
 	</form>

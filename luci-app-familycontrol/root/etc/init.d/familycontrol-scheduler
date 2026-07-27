@@ -1,0 +1,14 @@
+#!/bin/sh /etc/rc.common
+# SPDX-License-Identifier: GPL-3.0-or-later
+# shellcheck disable=SC2034,SC3043
+
+USE_PROCD=1
+START=94
+STOP=10
+
+start_service() {
+	procd_open_instance
+	procd_set_param command /usr/sbin/familycontrol-scheduler
+	procd_set_param respawn 3600 5 0
+	procd_close_instance
+}

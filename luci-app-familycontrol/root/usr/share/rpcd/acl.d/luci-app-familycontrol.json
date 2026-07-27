@@ -13,7 +13,11 @@
 					"save_person",
 					"delete_person",
 					"save_device",
-					"delete_device"
+					"delete_device",
+					"set_mode",
+					"add_extra",
+					"save_schedule",
+					"save_calendar"
 				]
 			}
 		}

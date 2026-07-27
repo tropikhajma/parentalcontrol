@@ -1,0 +1,8 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+while true; do
+	ubus call familycontrol tick >/dev/null 2>&1
+	now="$(date +%s)"
+	sleep "$((60 - now % 60))"
+done

@@ -8,6 +8,8 @@ let session = sessionStorage.getItem('familycontrol-session');
 let requestId = 0;
 let config = {};
 let candidates = [];
+let calendar = { day_off: [], school_day: [] };
+let savedCalendar = calendar;
 
 const $ = id => document.getElementById(id);
 
@@ -47,19 +49,38 @@ function escapeHtml(value) {
 	})[c]);
 }
 
+function clock(epoch) {
+	return new Date(epoch * 1000).toLocaleTimeString([], {
+		hour: '2-digit', minute: '2-digit'
+	});
+}
+
+function stateText(person) {
+	if (person.mode === 'schedule' || person.extra_until)
+		return `${person.paused ? 'Offline' : 'Online'}${person.next_transition ? ` until ${clock(person.next_transition)}` : ''}`;
+	return person.paused ? 'Paused' : 'Online';
+}
+
 async function load() {
 	const [status, discovered] = await Promise.all([
 		rpc('familycontrol', 'status'),
 		rpc('familycontrol', 'devices')
 	]);
 	candidates = discovered.devices || [];
+	savedCalendar = status.calendar || { day_off: [], school_day: [] };
+	calendar = savedCalendar;
 	config = {};
 	for (const person of status.people || []) {
 		config[person.id] = {
 			'.name': person.id,
 			'.type': 'person',
 			name: person.name,
-			paused: person.paused ? '1' : '0'
+			paused: person.paused ? '1' : '0',
+			mode: person.mode,
+			school_schedule: person.school_schedule,
+			dayoff_schedule: person.dayoff_schedule,
+			school_night_cutoff: person.school_night_cutoff,
+			dayoff_night_cutoff: person.dayoff_night_cutoff
 		};
 		for (const device of person.devices || [])
 			config[device.id] = {
@@ -80,12 +101,20 @@ function render(people) {
 		return `<article class="card">
 			<div class="row">
 				<div>
-					<h2>${escapeHtml(person.name)}</h2>
-					<p class="meta"><span class="${person.paused ? 'paused' : 'online'}">${person.paused ? 'Paused' : 'Online'}</span>
+					<h2><button class="link-button" data-action="schedule" data-id="${person.id}">${escapeHtml(person.name)}</button></h2>
+					<p class="meta"><span class="${person.paused ? 'paused' : 'online'}">${escapeHtml(stateText(person))}</span>
 					· ${owned.length} ${owned.length === 1 ? 'device' : 'devices'}</p>
 				</div>
-				<button data-action="pause" data-id="${person.id}" data-paused="${!person.paused}"
-					${owned.length ? '' : 'disabled'}>${person.paused ? 'Resume' : 'Pause'}</button>
+				<div class="actions">
+					${person.mode !== 'paused' ? `<button data-action="mode" data-mode="paused" data-id="${person.id}">Pause</button>` : ''}
+					${person.mode !== 'online' ? `<button data-action="mode" data-mode="online" data-id="${person.id}">Online</button>` : ''}
+					${person.mode !== 'schedule' ? `<button class="secondary" data-action="mode" data-mode="schedule" data-id="${person.id}">Use schedule</button>` : ''}
+					${person.mode !== 'online' ? `<details><summary>Extra time</summary>
+						<button type="button" data-action="extra" data-minutes="15" data-id="${person.id}">Add 15 minutes</button>
+						<button type="button" data-action="extra" data-minutes="30" data-id="${person.id}">Add 30 minutes</button>
+						<button type="button" data-action="extra" data-minutes="60" data-id="${person.id}">Add 1 hour</button>
+					</details>` : ''}
+				</div>
 			</div>
 			${owned.map(device => `<div class="card">
 				<strong>${escapeHtml(device.name || device.mac)}</strong>
@@ -140,6 +169,59 @@ $('add-person').addEventListener('click', () => {
 	$('person-id').value = '';
 	$('person-name').value = '';
 	$('person-dialog').showModal();
+});
+
+function renderExceptions() {
+	const labels = { day_off: 'Day off', school_day: 'School day' };
+	const rows = [ 'day_off', 'school_day' ].flatMap(kind =>
+		(calendar[kind] || []).map(date => ({ kind, date })))
+		.sort((a, b) => a.date.localeCompare(b.date));
+	$('calendar-exceptions').innerHTML = rows.length ? rows.map(row =>
+		`<div class="row card"><span><strong>${escapeHtml(row.date)}</strong><br><span class="meta">${labels[row.kind]}</span></span>
+		<button type="button" class="danger" data-remove-date="${escapeHtml(row.date)}" data-kind="${row.kind}">Remove</button></div>`
+	).join('') : '<p class="meta">No school-specific exceptions.</p>';
+}
+
+$('open-calendar').addEventListener('click', () => {
+	calendar = {
+		...savedCalendar,
+		day_off: [ ...(savedCalendar.day_off || []) ],
+		school_day: [ ...(savedCalendar.school_day || []) ]
+	};
+	renderExceptions();
+	$('calendar-dialog').showModal();
+});
+
+$('add-exception').addEventListener('click', () => {
+	const date = $('exception-date').value;
+	const kind = $('exception-kind').value;
+	if (!date) return showError('Choose a date.');
+	for (const list of [ calendar.day_off, calendar.school_day ]) {
+		const index = list.indexOf(date);
+		if (index >= 0) list.splice(index, 1);
+	}
+	calendar[kind].push(date);
+	$('exception-date').value = '';
+	renderExceptions();
+});
+
+$('calendar-exceptions').addEventListener('click', event => {
+	const button = event.target.closest('button[data-remove-date]');
+	if (!button) return;
+	calendar[button.dataset.kind] = calendar[button.dataset.kind]
+		.filter(date => date !== button.dataset.removeDate);
+	renderExceptions();
+});
+
+$('calendar-form').addEventListener('submit', async event => {
+	event.preventDefault();
+	try {
+		await mutateAndReload('save_calendar', {
+			day_off: calendar.day_off,
+			school_day: calendar.school_day
+		});
+		$('calendar-dialog').close();
+	} catch (error) { showError(error.message); }
 });
 
 document.querySelectorAll('.cancel').forEach(button =>
@@ -205,6 +287,58 @@ function populateDeviceChoices(currentMac = '') {
 	$('manual-mac-fields').classList.add('hidden');
 }
 
+function renderSlots(id, value) {
+	$(id).innerHTML = Array.from({ length: 48 }, (_, slot) => {
+		const minutes = slot * 30;
+		const label = `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${minutes % 60 ? '30' : '00'}`;
+		return `<button type="button" class="slot ${value[slot] === '1' ? 'selected' : ''}" data-slot="${slot}">${label}</button>`;
+	}).join('');
+}
+
+function cutoffOptions() {
+	return Array.from({ length: 49 }, (_, slot) => {
+		const minutes = slot * 30;
+		const label = minutes === 1440 ? '24:00' :
+			`${String(Math.floor(minutes / 60)).padStart(2, '0')}:${minutes % 60 ? '30' : '00'}`;
+		return `<option value="${minutes}">${label}</option>`;
+	}).join('');
+}
+
+function openSchedule(id) {
+	const person = config[id];
+	$('schedule-person').value = id;
+	$('schedule-title').textContent = `${person.name} schedule`;
+	renderSlots('school-slots', person.school_schedule);
+	renderSlots('dayoff-slots', person.dayoff_schedule);
+	$('school-cutoff').innerHTML = cutoffOptions();
+	$('dayoff-cutoff').innerHTML = cutoffOptions();
+	$('school-cutoff').value = person.school_night_cutoff;
+	$('dayoff-cutoff').value = person.dayoff_night_cutoff;
+	$('schedule-dialog').showModal();
+}
+
+document.querySelectorAll('.slot-grid').forEach(grid =>
+	grid.addEventListener('click', event => {
+		const slot = event.target.closest('.slot');
+		if (slot) slot.classList.toggle('selected');
+	}));
+
+$('schedule-form').addEventListener('submit', async event => {
+	event.preventDefault();
+	const bits = id => Array.from($(id).querySelectorAll('.slot'))
+		.map(slot => slot.classList.contains('selected') ? '1' : '0').join('');
+	try {
+		await mutateAndReload('save_schedule', {
+			person: $('schedule-person').value,
+			school_schedule: bits('school-slots'),
+			dayoff_schedule: bits('dayoff-slots'),
+			school_night_cutoff: +$('school-cutoff').value,
+			dayoff_night_cutoff: +$('dayoff-cutoff').value
+		});
+		$('schedule-dialog').close();
+	} catch (error) { showError(error.message); }
+});
+
 $('device-choice').addEventListener('change', () => {
 	const selected = candidates.find(device => device.mac === $('device-choice').value);
 	const manual = $('device-choice').value === 'manual';
@@ -221,12 +355,12 @@ $('people').addEventListener('click', async event => {
 	const { action, id } = button.dataset;
 	showError('');
 	try {
-		if (action === 'pause') {
-			await rpc('familycontrol', 'set_paused', {
-				person: id, paused: button.dataset.paused === 'true'
-			});
-			await load();
-		}
+		if (action === 'mode')
+			await mutateAndReload('set_mode', { person: id, mode: button.dataset.mode });
+		else if (action === 'extra')
+			await mutateAndReload('add_extra', { person: id, minutes: +button.dataset.minutes });
+		else if (action === 'schedule')
+			openSchedule(id);
 		else if (action === 'add-device') {
 			$('device-title').textContent = 'Add device';
 			$('device-id').value = '';

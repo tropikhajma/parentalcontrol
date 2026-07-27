@@ -6,9 +6,9 @@
   "metadata": {
     "component": {
       "type": "application",
-      "bom-ref": "pkg:generic/familycontrol@0.1.0-r15",
+      "bom-ref": "pkg:generic/familycontrol@0.1.0-r16",
       "name": "familycontrol",
-      "version": "0.1.0-r15",
+      "version": "0.1.0-r16",
       "licenses": [
         {
           "license": {
@@ -16,7 +16,7 @@
           }
         }
       ],
-      "purl": "pkg:generic/familycontrol@0.1.0-r15",
+      "purl": "pkg:generic/familycontrol@0.1.0-r16",
       "externalReferences": [
         {
           "type": "vcs",
@@ -2039,7 +2039,7 @@
       "dependsOn": []
     },
     {
-      "ref": "pkg:generic/familycontrol@0.1.0-r15",
+      "ref": "pkg:generic/familycontrol@0.1.0-r16",
       "dependsOn": [
         "openwrt:package:firewall4",
         "openwrt:package:luci-base",

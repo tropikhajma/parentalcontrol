@@ -2,16 +2,18 @@
 
 ## Product boundary
 
-The first vertical slice supports:
+The application supports:
 
 1. people;
 2. devices identified by MAC address;
 3. assigning devices to a person;
-4. pausing and resuming a person; and
-5. a responsive LuCI interface usable through Tailscale.
+4. online, paused, and scheduled access modes;
+5. accumulating temporary extra-time overrides;
+6. school-day/day-off calendars and evening cutoffs; and
+7. a responsive standalone interface usable through Tailscale.
 
-Weekly schedules, expiring overrides, usage reporting, content filtering, and a
-separate cloud service are deliberately deferred.
+Usage reporting, content filtering, and a separate cloud service remain
+deliberately deferred.
 
 ## Supported platform
 
@@ -61,6 +63,11 @@ config person
         option id 'alice'
         option name 'Alice'
         option paused '0'
+        option mode 'schedule'
+        option school_schedule '000000000000111111111111111111111111111111110000'
+        option dayoff_schedule '000000000000111111111111111111111111111111110000'
+        option school_night_cutoff '1320'
+        option dayoff_night_cutoff '1320'
 
 config device
         option id 'alice_phone'
@@ -103,6 +110,22 @@ unacceptable.
 The standalone app is the configuration interface. The older generic LuCI
 People & Devices form was removed because direct UCI writes could bypass the
 transaction and leave paused state out of sync with enforcement.
+
+## Schedule model
+
+Schedules are 48-bit strings, one bit per local half-hour. Today's
+school/day-off classification selects the slot map. Tomorrow's classification
+selects the evening cutoff, which is deliberately independent from the slot
+map. Czech statutory holidays for 2026–2035 are installed into UCI; weekends
+and those holidays are days off unless explicitly overridden. Local
+`day_off` and `school_day` lists cover school-specific exceptions, with
+`school_day` taking precedence.
+
+A minute-aligned procd service asks the backend to reconcile effective access.
+The reconciliation is idempotent: if generated firewall rules already equal
+the desired state, it neither writes UCI nor reloads firewall4. All manual
+mode changes cancel an extra-time override. Repeated extra-time grants extend
+the existing override or the nearest scheduled cutoff.
 
 ## Existing `luci-app-access-control`
 

@@ -10,8 +10,15 @@ node --check \
 node --check \
 	"$repo_dir/luci-app-familycontrol/root/www/family/app.js"
 
+npm --prefix "$repo_dir" run holidays >/dev/null
+git -C "$repo_dir" diff --exit-code -- \
+	luci-app-familycontrol/root/usr/share/familycontrol/cz-holidays-2026-2035.txt
+
 sh -n \
 	"$repo_dir/luci-app-familycontrol/root/etc/init.d/familycontrol-telemetry" \
+	"$repo_dir/luci-app-familycontrol/root/etc/init.d/familycontrol-scheduler" \
+	"$repo_dir/luci-app-familycontrol/root/etc/uci-defaults/96-familycontrol-scheduler" \
+	"$repo_dir/luci-app-familycontrol/root/etc/uci-defaults/97-familycontrol-schedule" \
 	"$repo_dir/luci-app-familycontrol/root/etc/uci-defaults/98-familycontrol-telemetry" \
 	"$repo_dir/luci-app-familycontrol/root/etc/uci-defaults/99-familycontrol-http" \
 	"$repo_dir/luci-app-familycontrol/root/usr/sbin/familycontrol-otel-export" \
@@ -26,7 +33,11 @@ jq -e '
 		| index("save_device") != null and
 		  index("delete_device") != null and
 		  index("save_person") != null and
-		  index("delete_person") != null
+		  index("delete_person") != null and
+		  index("set_mode") != null and
+		  index("add_extra") != null and
+		  index("save_schedule") != null and
+		  index("save_calendar") != null
 ' "$repo_dir/luci-app-familycontrol/root/usr/share/rpcd/acl.d/luci-app-familycontrol.json" \
 	>/dev/null
 
