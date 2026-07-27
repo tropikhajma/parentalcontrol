@@ -164,6 +164,21 @@ statically configured devices.
 
 ## Schedules and school calendar
 
+Schedules use the router's local time. Before relying on them, make sure
+OpenWrt is configured for the household's timezone. For this deployment:
+
+```sh
+uci set system.@system[0].zonename='Europe/Prague'
+uci set system.@system[0].timezone='CET-1CEST,M3.5.0,M10.5.0/3'
+uci commit system
+/etc/init.d/system reload
+/etc/init.d/rpcd restart
+/etc/init.d/familycontrol-scheduler restart
+```
+
+Verify that `date` on the router reports `CET` or `CEST`. A UTC-configured
+router would enforce a 22:00 cutoff at midnight during Czech summer time.
+
 Each person can be **Online**, **Paused**, or set to **Use schedule**. Select
 the person's name to edit two half-hour schedules:
 

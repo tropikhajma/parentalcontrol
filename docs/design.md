@@ -25,6 +25,8 @@ The initial development and deployment target is:
 - Linux 6.12
 - firewall4/nftables
 - the `apk` package manager used by OpenWrt 25.12
+- a correctly configured local timezone; schedule evaluation uses the router's
+  libc local-time rules, including daylight-saving transitions
 
 The application itself remains architecture-independent. OpenWrt 25.12 is the
 initial minimum supported release; support for 24.10/opkg can be evaluated
