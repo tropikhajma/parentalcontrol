@@ -4,7 +4,7 @@ This directory contains the first two phases of an AWS CI/CD learning exercise
 for the public Family Control GitHub repository:
 
 1. a manually triggered CodeBuild project; and
-2. a V1 CodePipeline triggered by pushes to `main`.
+2. a V2 CodePipeline with an explicit push trigger for `main`.
 
 Neither phase creates a VPC, NAT Gateway, persistent build capacity, release
 deployment, or access from AWS to the home router.
@@ -15,7 +15,7 @@ deployment, or access from AWS to the home router.
 - one manual and one pipeline-fed small, on-demand CodeBuild project;
 - one least-privilege CodeBuild service role; and
 - one CloudWatch log group with 14-day retention;
-- one V1 CodePipeline; and
+- one V2 CodePipeline; and
 - one private, encrypted, versioned artifact bucket whose objects expire after
   seven days.
 
@@ -110,9 +110,9 @@ only when deliberately started.
 
 ## Use the Phase 2 pipeline
 
-The `familycontrol-ci` V1 pipeline starts automatically for a push to `main`.
-Its source action uses `CODEBUILD_CLONE_REF`, so CodeBuild receives Git history
-and `npm run sbom:check` can detect a stale checked-in SBOM.
+The `familycontrol-ci` V2 pipeline has an explicit Git push trigger filtered to
+`main`. Its source action uses `CODEBUILD_CLONE_REF`, so CodeBuild receives Git
+history and `npm run sbom:check` can detect a stale checked-in SBOM.
 
 Inspect recent executions:
 
@@ -138,6 +138,11 @@ enabled so the learning environment can be removed with one OpenTofu destroy.
 
 The manual CodeBuild project remains available while Phase 2 is evaluated. It
 can be removed later if the pipeline fully replaces it.
+
+V2 pipelines are billed by action-execution minute. AWS currently provides 100
+free V2 action-execution minutes per account per month. This pipeline has only
+Source and Validate actions; monitor usage before adding pull-request triggers
+or more stages.
 
 ## Remove the environment
 

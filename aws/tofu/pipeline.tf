@@ -198,11 +198,25 @@ resource "aws_iam_role_policy" "codepipeline" {
 resource "aws_codepipeline" "ci" {
   name          = var.project_name
   role_arn      = aws_iam_role.codepipeline.arn
-  pipeline_type = "V1"
+  pipeline_type = "V2"
 
   artifact_store {
     location = aws_s3_bucket.pipeline_artifacts.bucket
     type     = "S3"
+  }
+
+  trigger {
+    provider_type = "CodeStarSourceConnection"
+
+    git_configuration {
+      source_action_name = "GitHub"
+
+      push {
+        branches {
+          includes = [var.github_branch]
+        }
+      }
+    }
   }
 
   stage {
@@ -220,7 +234,7 @@ resource "aws_codepipeline" "ci" {
         ConnectionArn        = aws_codestarconnections_connection.github.arn
         FullRepositoryId     = local.github_repository_id
         BranchName           = var.github_branch
-        DetectChanges        = "true"
+        DetectChanges        = "false"
         OutputArtifactFormat = "CODEBUILD_CLONE_REF"
       }
     }
