@@ -16,8 +16,11 @@ the home router.
 - one CloudWatch log group with 14-day retention.
 
 The build runs the same lint, SBOM, ShellCheck, ucode, ubus, UCI, Docker, and
-firewall4 checks as the existing GitHub workflow. Docker requires CodeBuild
-privileged mode. The project has no deployment credentials.
+firewall4 rule-rendering checks as the existing GitHub workflow. Docker
+requires CodeBuild privileged mode. CodeBuild's host kernel does not provide
+the nftables NAT modules needed by `nft --check`, so that final kernel-level
+assertion is skipped only in CodeBuild; it remains enabled in GitHub Actions
+and local CI. The project has no deployment credentials.
 
 ## Prerequisites
 

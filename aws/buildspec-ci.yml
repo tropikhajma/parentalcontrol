@@ -4,6 +4,10 @@ version: 0.2
 
 env:
   shell: bash
+  variables:
+    # CodeBuild's host kernel lacks the nftables NAT modules required by
+    # `nft --check`; rule rendering and all other integration checks still run.
+    FAMILYCONTROL_SKIP_NFT_KERNEL_CHECK: "1"
 
 phases:
   install:

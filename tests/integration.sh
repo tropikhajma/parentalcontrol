@@ -6,6 +6,7 @@ set -eu
 repo_dir="$(CDPATH='' cd -- "$(dirname -- "$0")/.." && pwd)"
 
 docker run --rm --platform linux/amd64 --cap-add NET_ADMIN \
+	-e FAMILYCONTROL_SKIP_NFT_KERNEL_CHECK \
 	-v "$repo_dir:/src:ro" \
 	openwrt/rootfs:x86_64 \
 	/bin/sh -ec '
@@ -59,6 +60,7 @@ docker run --rm --platform linux/amd64 --cap-add NET_ADMIN \
 		test "$(uci get firewall.familycontrol_alice.target)" = REJECT
 		test "$(uci get firewall.familycontrol_alice.src_mac)" = \
 			"00:11:22:33:44:55 AA:BB:CC:DD:EE:FF"
+		fw4 print | grep -q "Family Control: alice"
 
 		# A schedule with no online slots blocks the person. Extra time grants
 		# temporary access, and tick restores enforcement when it expires.
@@ -128,7 +130,11 @@ docker run --rm --platform linux/amd64 --cap-add NET_ADMIN \
 		! uci -q get familycontrol.alice_phone
 		! uci -q get familycontrol.alice_laptop
 		! uci -q get firewall.familycontrol_alice
-		fw4 check
+		if [ "${FAMILYCONTROL_SKIP_NFT_KERNEL_CHECK:-0}" = 1 ]; then
+			echo "Skipping nftables kernel check; fw4 rendering was verified."
+		else
+			fw4 check
+		fi
 
 		telemetry="$(ucode \
 			/src/luci-app-familycontrol/root/usr/libexec/familycontrol-otel-payload)"
