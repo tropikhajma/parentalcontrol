@@ -5,6 +5,21 @@ output "codebuild_project_name" {
   value       = aws_codebuild_project.ci.name
 }
 
+output "codepipeline_name" {
+  description = "V1 pipeline triggered by pushes to the configured branch."
+  value       = aws_codepipeline.ci.name
+}
+
+output "pipeline_codebuild_project_name" {
+  description = "CodeBuild project receiving full-clone pipeline source."
+  value       = aws_codebuild_project.pipeline_ci.name
+}
+
+output "pipeline_artifact_bucket" {
+  description = "Private seven-day CodePipeline artifact bucket."
+  value       = aws_s3_bucket.pipeline_artifacts.bucket
+}
+
 output "github_connection_arn" {
   description = "Authorize this pending connection once in the AWS console."
   value       = aws_codestarconnections_connection.github.arn

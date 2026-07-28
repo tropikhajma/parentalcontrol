@@ -41,10 +41,10 @@ OpenWrt container.
 
 ## AWS CI/CD learning environment
 
-An optional, manually triggered AWS CodeBuild implementation of these checks is
-defined under [`aws/`](aws/README.md). Phase 1 uses OpenTofu and intentionally
-creates no automatic trigger, release bucket, network path to the router, or
-deployment credentials.
+An optional AWS CodeBuild and CodePipeline implementation of these checks is
+defined under [`aws/`](aws/README.md). It uses OpenTofu and intentionally
+creates no release deployment, network path to the router, or deployment
+credentials.
 
 ## Local security scan
 

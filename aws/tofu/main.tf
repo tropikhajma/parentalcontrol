@@ -58,6 +58,15 @@ resource "aws_iam_role_policy" "codebuild" {
           "codeconnections:UseConnection"
         ]
         Resource = aws_codestarconnections_connection.github.arn
+      },
+      {
+        Sid    = "ReadPipelineSourceArtifact"
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:GetObjectVersion"
+        ]
+        Resource = "${aws_s3_bucket.pipeline_artifacts.arn}/*"
       }
     ]
   })

@@ -1,19 +1,23 @@
 # AWS CI/CD learning environment
 
-This directory contains Phase 1 of an AWS CI/CD learning exercise. It creates
-one manually triggered AWS CodeBuild project for the public Family Control
-GitHub repository.
+This directory contains the first two phases of an AWS CI/CD learning exercise
+for the public Family Control GitHub repository:
 
-Phase 1 deliberately does not create CodePipeline, webhooks, an S3 artifact
-bucket, a VPC, a NAT Gateway, persistent build capacity, or access from AWS to
-the home router.
+1. a manually triggered CodeBuild project; and
+2. a V1 CodePipeline triggered by pushes to `main`.
+
+Neither phase creates a VPC, NAT Gateway, persistent build capacity, release
+deployment, or access from AWS to the home router.
 
 ## What it creates
 
 - one AWS CodeConnections GitHub App connection;
-- one small, on-demand CodeBuild project;
+- one manual and one pipeline-fed small, on-demand CodeBuild project;
 - one least-privilege CodeBuild service role; and
-- one CloudWatch log group with 14-day retention.
+- one CloudWatch log group with 14-day retention;
+- one V1 CodePipeline; and
+- one private, encrypted, versioned artifact bucket whose objects expire after
+  seven days.
 
 The build runs the same lint, SBOM, ShellCheck, ucode, ubus, UCI, Docker, and
 firewall4 rule-rendering checks as the existing GitHub workflow. Docker
@@ -76,7 +80,7 @@ Then open **AWS Developer Tools → Settings → Connections** in `eu-central-1`
 select `familycontrol-ci-github`, choose **Update pending connection**, and
 authorize the GitHub App for this repository.
 
-After authorization, create the remaining Phase 1 resources:
+After authorization, create the remaining resources:
 
 ```sh
 tofu -chdir=aws/tofu apply
@@ -85,7 +89,7 @@ tofu -chdir=aws/tofu apply
 Review the plan carefully before approving either operation. Targeted apply is
 used only to cross the connection's mandatory one-time authorization boundary.
 
-## Run the build
+## Run the manual Phase 1 build
 
 ```sh
 aws codebuild start-build \
@@ -101,8 +105,39 @@ aws codebuild batch-get-builds \
   --ids BUILD_ID
 ```
 
-CloudWatch retains build logs for 14 days. There is no automatic trigger in
-Phase 1, so builds consume minutes only when deliberately started.
+CloudWatch retains build logs for 14 days. The manual project consumes minutes
+only when deliberately started.
+
+## Use the Phase 2 pipeline
+
+The `familycontrol-ci` V1 pipeline starts automatically for a push to `main`.
+Its source action uses `CODEBUILD_CLONE_REF`, so CodeBuild receives Git history
+and `npm run sbom:check` can detect a stale checked-in SBOM.
+
+Inspect recent executions:
+
+```sh
+aws codepipeline list-pipeline-executions \
+  --region eu-central-1 \
+  --pipeline-name familycontrol-ci \
+  --max-results 5
+```
+
+Start an execution without making a commit:
+
+```sh
+aws codepipeline start-pipeline-execution \
+  --region eu-central-1 \
+  --name familycontrol-ci
+```
+
+The S3 bucket exists only for internal pipeline source artifacts. It blocks all
+public access, enforces TLS, uses S3-managed encryption and versioning, and
+expires current and noncurrent objects after seven days. `force_destroy` is
+enabled so the learning environment can be removed with one OpenTofu destroy.
+
+The manual CodeBuild project remains available while Phase 2 is evaluated. It
+can be removed later if the pipeline fully replaces it.
 
 ## Remove the environment
 
