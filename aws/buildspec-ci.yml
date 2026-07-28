@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+version: 0.2
+
+env:
+  shell: bash
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 22
+    commands:
+      - apt-get update
+      - apt-get install --yes --no-install-recommends jq shellcheck
+      - npm ci
+
+  pre_build:
+    commands:
+      - docker info
+
+  build:
+    commands:
+      - npm run lint
+      - npm run sbom:check
+      - ./tests/shellcheck.sh
+      - ./tests/check.sh

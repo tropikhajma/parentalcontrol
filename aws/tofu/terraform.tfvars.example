@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+aws_region            = "eu-central-1"
+project_name          = "familycontrol-ci"
+github_repository_url = "https://github.com/tropikhajma/parentalcontrol.git"
+github_branch         = "main"
+log_retention_days    = 14

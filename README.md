@@ -39,6 +39,13 @@ They validate JavaScript and JSON syntax, compile the rpcd ucode plugin, and run
 pause/resume through real ubus, rpcd, UCI, and firewall4 components in an
 OpenWrt container.
 
+## AWS CI/CD learning environment
+
+An optional, manually triggered AWS CodeBuild implementation of these checks is
+defined under [`aws/`](aws/README.md). Phase 1 uses OpenTofu and intentionally
+creates no automatic trigger, release bucket, network path to the router, or
+deployment credentials.
+
 ## Local security scan
 
 Run an OWASP ZAP passive baseline scan from a laptop that can reach the router:
