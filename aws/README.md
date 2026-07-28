@@ -33,11 +33,19 @@ credential mechanism. Do not create or commit a long-lived IAM access key.
 Confirm the intended account before creating anything:
 
 ```sh
+export AWS_PROFILE=AdministratorAccess-174516978701
+aws sso login --profile "$AWS_PROFILE"
 aws sts get-caller-identity
-aws configure get region
 ```
 
-The default region is `eu-central-1`.
+`AWS_PROFILE` is inherited by OpenTofu through the AWS SDK credential chain,
+so it must remain set in the terminal used for `tofu plan` and `tofu apply`.
+Alternatively, prefix an individual command with
+`AWS_PROFILE=AdministratorAccess-174516978701`.
+
+The expected account is `174516978701`. Stop if `get-caller-identity` reports
+another account. The OpenTofu configuration's default region is
+`eu-central-1`, independently of the CLI profile's default region.
 
 ## Validate locally
 
