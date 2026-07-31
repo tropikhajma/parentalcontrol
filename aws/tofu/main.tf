@@ -3,7 +3,7 @@
 data "aws_caller_identity" "current" {}
 
 resource "aws_codestarconnections_connection" "github" {
-  name          = "${var.project_name}-github"
+  name          = "${var.project_name}-github-v2"
   provider_type = "GitHub"
 }
 

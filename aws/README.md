@@ -106,8 +106,11 @@ tofu -chdir=aws/tofu apply \
 ```
 
 Then open **AWS Developer Tools → Settings → Connections** in `eu-central-1`,
-select `familycontrol-ci-github`, choose **Update pending connection**, and
-authorize the GitHub App for this repository.
+select `familycontrol-ci-github-v2`, and choose **Update pending connection**.
+During the GitHub flow, install the AWS Connector for GitHub App on the account
+that owns the repository and grant it access to `parentalcontrol`. Merely
+listing the App under **Authorized GitHub Apps** is insufficient: it must also
+appear under **Installed GitHub Apps** so GitHub delivers push events.
 
 After authorization, create the remaining resources:
 
