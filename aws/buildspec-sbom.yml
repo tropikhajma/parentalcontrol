@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+version: 0.2
+
+env:
+  shell: bash
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 22
+
+  build:
+    commands:
+      - npm run sbom:check

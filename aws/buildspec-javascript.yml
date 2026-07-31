@@ -1,0 +1,17 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+version: 0.2
+
+env:
+  shell: bash
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 22
+    commands:
+      - npm ci
+
+  build:
+    commands:
+      - npm run lint

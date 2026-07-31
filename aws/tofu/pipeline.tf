@@ -5,6 +5,33 @@ locals {
     trimsuffix(var.github_repository_url, ".git"),
     "https://github.com/"
   )
+
+  pipeline_validation_jobs = {
+    javascript = {
+      display_name = "JavaScriptLint"
+      description  = "Install JavaScript dependencies and run ESLint"
+      buildspec    = "aws/buildspec-javascript.yml"
+      privileged   = false
+    }
+    sbom = {
+      display_name = "SBOM"
+      description  = "Verify that the checked-in CycloneDX SBOM is current"
+      buildspec    = "aws/buildspec-sbom.yml"
+      privileged   = false
+    }
+    shellcheck = {
+      display_name = "ShellCheck"
+      description  = "Lint all maintained shell scripts"
+      buildspec    = "aws/buildspec-shellcheck.yml"
+      privileged   = false
+    }
+    openwrt = {
+      display_name = "OpenWrtIntegration"
+      description  = "Run ucode, ubus, UCI and firewall integration checks"
+      buildspec    = "aws/buildspec-openwrt.yml"
+      privileged   = true
+    }
+  }
 }
 
 resource "aws_s3_bucket" "pipeline_artifacts" {
@@ -94,9 +121,11 @@ resource "aws_s3_bucket_policy" "pipeline_artifacts" {
   depends_on = [aws_s3_bucket_public_access_block.pipeline_artifacts]
 }
 
-resource "aws_codebuild_project" "pipeline_ci" {
-  name          = "${var.project_name}-pipeline"
-  description   = "CodePipeline validation for Family Control"
+resource "aws_codebuild_project" "pipeline_validation" {
+  for_each = local.pipeline_validation_jobs
+
+  name          = "${var.project_name}-${each.key}"
+  description   = each.value.description
   service_role  = aws_iam_role.codebuild.arn
   build_timeout = 15
 
@@ -104,12 +133,12 @@ resource "aws_codebuild_project" "pipeline_ci" {
     type = "CODEPIPELINE"
   }
 
-  cache {
-    type = "LOCAL"
-    modes = [
-      "LOCAL_DOCKER_LAYER_CACHE",
-      "LOCAL_SOURCE_CACHE"
-    ]
+  dynamic "cache" {
+    for_each = each.value.privileged ? [true] : []
+    content {
+      type  = "LOCAL"
+      modes = ["LOCAL_DOCKER_LAYER_CACHE"]
+    }
   }
 
   environment {
@@ -117,13 +146,13 @@ resource "aws_codebuild_project" "pipeline_ci" {
     image                       = "aws/codebuild/standard:7.0"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
-    privileged_mode             = true
+    privileged_mode             = each.value.privileged
   }
 
   logs_config {
     cloudwatch_logs {
       group_name  = aws_cloudwatch_log_group.codebuild.name
-      stream_name = "pipeline"
+      stream_name = each.key
       status      = "ENABLED"
     }
 
@@ -134,7 +163,7 @@ resource "aws_codebuild_project" "pipeline_ci" {
 
   source {
     type      = "CODEPIPELINE"
-    buildspec = "aws/buildspec-ci.yml"
+    buildspec = each.value.buildspec
   }
 
   depends_on = [aws_iam_role_policy.codebuild]
@@ -189,7 +218,7 @@ resource "aws_iam_role_policy" "codepipeline" {
           "codebuild:StartBuild",
           "codebuild:BatchGetBuilds"
         ]
-        Resource = aws_codebuild_project.pipeline_ci.arn
+        Resource = values(aws_codebuild_project.pipeline_validation)[*].arn
       }
     ]
   })
@@ -243,16 +272,20 @@ resource "aws_codepipeline" "ci" {
   stage {
     name = "Validate"
 
-    action {
-      name            = "CodeBuild"
-      category        = "Build"
-      owner           = "AWS"
-      provider        = "CodeBuild"
-      version         = "1"
-      input_artifacts = ["SourceArtifact"]
+    dynamic "action" {
+      for_each = local.pipeline_validation_jobs
+      content {
+        name            = action.value.display_name
+        category        = "Build"
+        owner           = "AWS"
+        provider        = "CodeBuild"
+        version         = "1"
+        run_order       = 1
+        input_artifacts = ["SourceArtifact"]
 
-      configuration = {
-        ProjectName = aws_codebuild_project.pipeline_ci.name
+        configuration = {
+          ProjectName = aws_codebuild_project.pipeline_validation[action.key].name
+        }
       }
     }
   }

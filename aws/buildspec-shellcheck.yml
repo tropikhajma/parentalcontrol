@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+version: 0.2
+
+env:
+  shell: bash
+
+phases:
+  install:
+    commands:
+      - apt-get update
+      - apt-get install --yes --no-install-recommends shellcheck
+
+  build:
+    commands:
+      - ./tests/shellcheck.sh

@@ -10,9 +10,11 @@ output "codepipeline_name" {
   value       = aws_codepipeline.ci.name
 }
 
-output "pipeline_codebuild_project_name" {
-  description = "CodeBuild project receiving full-clone pipeline source."
-  value       = aws_codebuild_project.pipeline_ci.name
+output "pipeline_codebuild_project_names" {
+  description = "Independent CodeBuild projects receiving full-clone pipeline source."
+  value = {
+    for name, project in aws_codebuild_project.pipeline_validation : name => project.name
+  }
 }
 
 output "pipeline_artifact_bucket" {

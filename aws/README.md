@@ -12,7 +12,7 @@ deployment, or access from AWS to the home router.
 ## What it creates
 
 - one AWS CodeConnections GitHub App connection;
-- one manual and one pipeline-fed small, on-demand CodeBuild project;
+- one manual and four focused pipeline-fed, on-demand CodeBuild projects;
 - one least-privilege CodeBuild service role; and
 - one CloudWatch log group with 14-day retention;
 - one V2 CodePipeline; and
@@ -25,6 +25,34 @@ requires CodeBuild privileged mode. CodeBuild's host kernel does not provide
 the nftables NAT modules needed by `nft --check`, so that final kernel-level
 assertion is skipped only in CodeBuild; it remains enabled in GitHub Actions
 and local CI. The project has no deployment credentials.
+
+## Validation dependency graph
+
+The automatic pipeline deliberately separates failure domains:
+
+```text
+GitHub Source
+   |-- JavaScriptLint ----- npm ci, ESLint
+   |-- SBOM --------------- regenerate and compare CycloneDX SBOM
+   |-- ShellCheck ---------- lint maintained shell scripts
+   `-- OpenWrtIntegration -- ucode, ubus, UCI and firewall tests
+             |
+        Validate stage
+```
+
+All four validation actions depend on the GitHub source action. They have no
+dependencies on one another and use the same CodePipeline run order, so AWS
+can run them in parallel. The Validate stage is the join: one failed action
+fails the stage and pipeline, while each action has its own build status and
+CloudWatch log stream.
+
+Only `OpenWrtIntegration` has Docker privileged mode. JavaScript, SBOM and
+ShellCheck builds run without it. The separate jobs intentionally repeat a
+small amount of environment startup work in exchange for clearer failures and
+independent execution.
+
+The manually triggered Phase 1 project remains an all-in-one build for a quick
+complete diagnostic. It is not used by the automatic pipeline.
 
 ## Prerequisites
 
@@ -137,12 +165,12 @@ expires current and noncurrent objects after seven days. `force_destroy` is
 enabled so the learning environment can be removed with one OpenTofu destroy.
 
 The manual CodeBuild project remains available while Phase 2 is evaluated. It
-can be removed later if the pipeline fully replaces it.
+can be removed later if the parallel pipeline fully replaces it.
 
 V2 pipelines are billed by action-execution minute. AWS currently provides 100
-free V2 action-execution minutes per account per month. This pipeline has only
-Source and Validate actions; monitor usage before adding pull-request triggers
-or more stages.
+free V2 action-execution minutes per account per month. Splitting validation
+into four actions improves diagnostics but consumes more action minutes per
+push, so monitor usage before adding pull-request triggers or more stages.
 
 ## Remove the environment
 
