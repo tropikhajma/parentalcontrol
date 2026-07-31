@@ -6,7 +6,7 @@ output "codebuild_project_name" {
 }
 
 output "codepipeline_name" {
-  description = "V2 pipeline explicitly triggered by pushes to the configured branch."
+  description = "V2 pipeline triggered by pushes to the configured source branch."
   value       = aws_codepipeline.ci.name
 }
 

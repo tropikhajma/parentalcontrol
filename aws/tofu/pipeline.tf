@@ -234,20 +234,6 @@ resource "aws_codepipeline" "ci" {
     type     = "S3"
   }
 
-  trigger {
-    provider_type = "CodeStarSourceConnection"
-
-    git_configuration {
-      source_action_name = "GitHub"
-
-      push {
-        branches {
-          includes = [var.github_branch]
-        }
-      }
-    }
-  }
-
   stage {
     name = "Source"
 
@@ -263,7 +249,7 @@ resource "aws_codepipeline" "ci" {
         ConnectionArn        = aws_codestarconnections_connection.github.arn
         FullRepositoryId     = local.github_repository_id
         BranchName           = var.github_branch
-        DetectChanges        = "false"
+        DetectChanges        = "true"
         OutputArtifactFormat = "CODEBUILD_CLONE_REF"
       }
     }

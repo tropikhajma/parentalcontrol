@@ -4,7 +4,8 @@ This directory contains the first two phases of an AWS CI/CD learning exercise
 for the public Family Control GitHub repository:
 
 1. a manually triggered CodeBuild project; and
-2. a V2 CodePipeline with an explicit push trigger for `main`.
+2. a V2 CodePipeline using the GitHub connection's native push detection for
+   the configured branch (`main` by default).
 
 Neither phase creates a VPC, NAT Gateway, persistent build capacity, release
 deployment, or access from AWS to the home router.
@@ -138,9 +139,10 @@ only when deliberately started.
 
 ## Use the Phase 2 pipeline
 
-The `familycontrol-ci` V2 pipeline has an explicit Git push trigger filtered to
-`main`. Its source action uses `CODEBUILD_CLONE_REF`, so CodeBuild receives Git
-history and `npm run sbom:check` can detect a stale checked-in SBOM.
+The `familycontrol-ci` V2 pipeline uses the GitHub connection's native change
+detection for its configured source branch (`main` by default). Its source
+action uses `CODEBUILD_CLONE_REF`, so CodeBuild receives Git history and
+`npm run sbom:check` can detect a stale checked-in SBOM.
 
 Inspect recent executions:
 
